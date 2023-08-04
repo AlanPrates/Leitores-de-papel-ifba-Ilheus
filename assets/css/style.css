@@ -1,0 +1,226 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+/* Estilos para o container */
+.container {
+    max-width: 400px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+/* Estilos do título */
+h2 {
+    text-align: center;
+}
+
+/* Estilos do formulário */
+form {
+    margin-top: 20px;
+}
+
+/* Estilos dos campos de entrada de texto, senha e seleção */
+input[type="text"],
+input[type="password"],
+input[type="tel"],
+input[type="email"],
+select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* Estilos do botão de envio */
+input[type="submit" ] {
+    width: 100%;
+    padding: 10px;
+    background-color: #DEB887 ;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Estilos do botão de envio quando hover */
+input[type="submit"]:hover {
+    background-color: #DEB887;
+}
+/* Estilos para o título */
+.container h2 {
+    text-align: center;
+    color: #333333;
+}
+
+/* Estilos para o formulário */
+.container form {
+    margin-top: 20px;
+}
+
+/* Estilos para as entradas de texto */
+.container input[type="text"],
+.container input[type="tel"],
+.container input[type="email"],
+.container input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #dddddd;
+    margin-bottom: 10px;
+}
+
+/* Estilos para o botão de login */
+.container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #F79327;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+}
+
+/* Estilos para o link de recuperação de senha */
+.container .forgot-password {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Estilos para a mensagem de erro */
+.container .error-message {
+    color: #ff0000;
+    text-align: center;
+    margin-top: 10px;
+}
+
+
+
+
+.content img {
+    display:flex;
+    margin: 0 auto; /* Adiciona margens automáticas horizontalmente para centralizar */
+    width: 100%;
+    height: auto;
+}
+
+/* Estilos responsivos */
+
+@media (max-width: 768px) {
+    .rodape {
+        margin-top: 0;
+    }
+}
+/*---------------------------------------------------------------------------------------------------------------*/
+.area-box {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+}
+
+h3 {
+    margin: 0;
+    padding: 10px 0;
+}
+
+.row {
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.col-sm-12 {
+    flex: 0 0 100%;
+    max-width: 100%;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+    color: #fff;
+}
+
+.btn-warning {
+    background-color: #ffc107;
+    color: #212529;
+}
+
+.btn-success {
+    background-color: #28a745;
+    color: #fff;
+}
+
+.text-info {
+    color: #17a2b8;
+}
+
+.text-warning {
+    color: #ffc107;
+}
+
+.text-success {
+    color: #28a745;
+}
+
+.text-center {
+    text-align: center;
+}
+/* Estilos para dispositivos móveis */
+@media screen and (max-width: 768px) {
+    .livro-imagem {
+        float: none;
+        margin-right: 0;
+        margin-bottom: 10px;
+        text-align: center;
+    }
+
+    .livro-imagem img {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+    }
+
+    .livro-detalhes {
+        text-align: center;
+    }
+}
+
+/* Estilos responsivos */
+@media (max-width: 600px) {
+    .container {
+        max-width: 300px;
+        margin: 20px auto;
+        padding: 10px;
+    }
+
+    .container input[type="submit"] {
+        font-size: 14px;
+    }
+
+    .content {
+        max-width: 600px;
+    }
+
+    footer {
+        max-width: 600px;
+        margin-top: 20px;
+    }
+}

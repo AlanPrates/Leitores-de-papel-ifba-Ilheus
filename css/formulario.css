@@ -1,0 +1,150 @@
+/********************************/
+/* Estilos do formulário */
+
+.container {
+    background-color: whitesmoke;
+    margin-left: auto;
+    margin-right: auto;
+    width: 370px;
+    height: 980px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: 0 0 20px 0 darkgrey;
+}
+
+form {
+    position: absolute;
+    margin-top: 80px;
+    transition: .5s;
+    width: 300px;
+    height: 400px;
+}
+
+.buttonsForm {
+    margin-top: 50px;
+    position: relative;
+    border-radius: 30px;
+    box-shadow: 0 0 7px 0 #ffc107;
+}
+
+.buttonsForm button {
+    cursor: pointer;
+    background: transparent;
+    border: none;
+    position: relative;
+    padding: 10px 29px;
+}
+
+.btnColor {
+    position: absolute;
+    width: 126px;
+    height: 100%;
+    background: linear-gradient(to right, #e95662, #ffc107);
+    border-radius: 30px;
+    transition: .4s;
+}
+
+input[type="text"],
+input[type="password"],
+input[type="tel"] {
+    border: none;
+    margin-top: 40px;
+    border-radius: 60px;
+    padding: 8px 0 8px 35px;
+    outline: none;
+    width: 100%;
+    
+}
+
+button[type="submit"]  {
+    background: #ffc107;
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px 0 8px 15px;
+    font-size: 15px;
+    margin-top: 40px;
+    cursor: pointer;
+}
+.btnvoltar {
+    background: #ffc107;
+    color: white;
+    border-radius: 30px;
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 8px 0 8px 15px;
+    font-size: 15px;
+    margin-top: 40px;
+    cursor: pointer;
+}
+
+.divCheck {
+    margin: 10px 0 0 5px;
+    width: 80%;
+    font-size: 13px;
+}
+
+#signin {
+    left: 25px;
+}
+
+#signup {
+    left: 450px;
+}
+
+i {
+    position: absolute;
+    left: 0;
+    padding: 10px 10px;
+}
+
+.iEmail {
+    top: 40px;
+}
+
+.iPassword {
+    top: 114px;
+}
+
+.iPassword2 {
+    top: 190px;
+}
+
+/********************************/
+/* Estilos adicionais */
+
+.custom-select {
+    color: darkgrey;
+    width: 100%;
+    padding: 8px 0 8px 35px;
+    border: none;
+    border-radius: 60px;
+    font-size: 15px;
+}
+
+.custom-input {
+    width: 100%;
+    color: darkgrey;
+    padding: 8px 0 8px 35px;
+    border: none;
+    border-radius: 60px;
+    font-size: 15px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+
+}
+footer {
+    background-color: #DB005B;
+    padding: 20px;
+    color: white;
+    text-align: center;
+}
