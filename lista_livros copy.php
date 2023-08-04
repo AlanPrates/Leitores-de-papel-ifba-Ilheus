@@ -9,19 +9,12 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Consulta SQL para obter o total de quantidade de livros disponíveis
-$query_total_disponivel = "SELECT SUM(quantidade) AS total_disponivel FROM livros";
-$result_total_disponivel = $conn->query($query_total_disponivel);
-$row_total_disponivel = $result_total_disponivel->fetch_assoc();
-$total_disponivel = $row_total_disponivel['total_disponivel'];
-
-// Definição das variáveis de filtro (mantenha essas linhas, se houver necessidade de filtrar)
+// Definição das variáveis de filtro
 $filtroTitulo = isset($_GET['titulo']) ? $_GET['titulo'] : '';
 $filtroAutor = isset($_GET['autor']) ? $_GET['autor'] : '';
 $filtroAno = isset($_GET['ano']) ? $_GET['ano'] : '';
 $filtroDisponibilidade = isset($_GET['disponibilidade']) ? $_GET['disponibilidade'] : '';
 $filtroOrdem = isset($_GET['ordem']) ? $_GET['ordem'] : '';
-$query = "SELECT *, quantidade - quantidade_emprestada AS quantidade_disponivel FROM livros WHERE 1=1";
 
 // Construção da consulta SQL com os filtros
 $query = "SELECT * FROM livros WHERE 1=1";
@@ -59,7 +52,6 @@ if ($result && $result->num_rows > 0) {
 
 
 ?>
-
 <!DOCTYPE html>
 <html>
 
@@ -95,7 +87,7 @@ if ($result && $result->num_rows > 0) {
             <div class="nav-list">
                 <ul>
                     <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                    <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
+                    <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
                     <li class="nav-item"><a href="loginAdmin.php" class="nav-link">Acessar como Administrador</a></li>
                 </ul>
             </div>
@@ -107,17 +99,13 @@ if ($result && $result->num_rows > 0) {
         <div class="mobile-menu">
             <ul>
                 <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
+                <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
                 <li class="nav-item"><a href="loginAdmin.php" class="nav-link">Acessar como Administrador</a></li>
             </ul>
         </div>
     </header>
     <div class="container">
         <h2>Lista de Livros</h2>
-        <div class="alert alert-warning" role="alert">
-    Total de Livros Disponíveis: <?php echo $total_disponivel; ?>
-</div>
-
         <form method="get" action="lista_livros.php">
             <div class="form-row">
                 <div class="col-md-4 mb-3">
