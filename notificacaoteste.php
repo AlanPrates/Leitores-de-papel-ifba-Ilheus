@@ -57,4 +57,3 @@ if (enviarNotificacao($email, $livro, $dataVencimento)) {
 } else {
     echo 'Falha ao enviar o e-mail.';
 }
-?>

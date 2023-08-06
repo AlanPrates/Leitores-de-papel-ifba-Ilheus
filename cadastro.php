@@ -79,9 +79,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         </div>
         <div class="nav-list">
           <ul>
-            <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar Conta</a></li>
+            <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
             <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-            <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador </a></li>
           </ul>
         </div>
         <div class="mobile-menu-icon">
@@ -90,9 +89,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
       </nav>
       <div class="mobile-menu">
         <ul>
-          <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar Conta</a></li>
+          <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
           <li class="nav-item"><a href="index.php" class="nav-link">Acessar Minhas Leituras</a></li>
-          <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
         </ul>
       </div>
     </header>
@@ -146,45 +144,45 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 <input type="text" class="form-control" id="usuario" name="username" required>
               </div>
               <div class="form-group">
-              <label for="senha">Senha<span class="text-danger">*</span>:</label>
-              <div class="input-group">
-                <input type="password" class="form-control" id="senha" name="password" required>
-                <div class="input-group-append">
-                  <span class="input-group-text">
-                    <i id="icone-senha" class="fas fa-eye" onclick="mostrarSenha()"></i>
-                  </span>
+                <label for="senha">Senha<span class="text-danger">*</span>:</label>
+                <div class="input-group">
+                  <input type="password" class="form-control" id="senha" name="password" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">
+                      <i id="icone-senha" class="fas fa-eye" onclick="mostrarSenha()"></i>
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div class="form-group">
-                <label for="confirmar-senha">Repetir Senha<span class="text-danger">*</span>:</label>
-                <input type="password" class="form-control" id="confirmar-senha" name="confirmar-senha" required>
-              </div>
-
-
-              <div class="divCheck">
-                <div class="termos-texto p-2" style="max-height: 100px; overflow: auto;">
-                  Por favor, leia e aceite os termos abaixo:
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus lacus non neque ullamcorper, nec semper quam cursus. Donec ac felis at purus tincidunt luctus. Vivamus consequat dolor sit amet rutrum ultrices. Mauris dapibus elit non risus pulvinar, sed condimentum enim hendrerit. Sed interdum orci eget semper ultrices. Suspendisse aliquam, risus sit amet porttitor tempus, justo odio congue purus, sed rhoncus orci enim non nulla. Ut sagittis ultrices tempor. Donec finibus metus sit amet tortor efficitur dignissim. Duis vehicula, est vel gravida vulputate, augue sem pellentesque felis, sed blandit lorem ligula in mi.
+                <div class="form-group">
+                  <label for="confirmar-senha">Repetir Senha<span class="text-danger">*</span>:</label>
+                  <input type="password" class="form-control" id="confirmar-senha" name="confirmar-senha" required>
                 </div>
-                <div class="form-check form-check-inline">
-                  <input class="form-check-input" type="checkbox" id="aceitar-termos" required>
-                  <label class="form-check-label" for="aceitar-termos">Aceitar Termos<span class="text-danger">*</span></label>
+
+
+                <div class="divCheck">
+                  <div class="termos-texto p-2" style="max-height: 100px; overflow: auto;">
+                    Por favor, leia e aceite os termos abaixo:
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus lacus non neque ullamcorper, nec semper quam cursus. Donec ac felis at purus tincidunt luctus. Vivamus consequat dolor sit amet rutrum ultrices. Mauris dapibus elit non risus pulvinar, sed condimentum enim hendrerit. Sed interdum orci eget semper ultrices. Suspendisse aliquam, risus sit amet porttitor tempus, justo odio congue purus, sed rhoncus orci enim non nulla. Ut sagittis ultrices tempor. Donec finibus metus sit amet tortor efficitur dignissim. Duis vehicula, est vel gravida vulputate, augue sem pellentesque felis, sed blandit lorem ligula in mi.
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="aceitar-termos" required>
+                    <label class="form-check-label" for="aceitar-termos">Aceitar Termos<span class="text-danger">*</span></label>
+                  </div>
                 </div>
-              </div>
-              <br>
-              <button type="submit" class="btn btn-danger">Cadastrar</button>
-              <br>
-              <p class="text-center mt-3">JÁ possui cadastro? <a href="index.php">Clique aqui</a>.</p>
-              <?php
-              // Exibe mensagens de erro ou sucesso
-              if (isset($error_message)) {
-                echo '<div class="alert alert-danger" role="alert">' . $error_message . '</div>';
-              }
-              if (isset($success_message)) {
-                echo '<div class="alert alert-success" role="alert">' . $success_message . '</div>';
-              }
-              ?>
+                <br>
+                <button type="submit" class="btn btn-danger">Cadastrar</button>
+                <br>
+                <p class="text-center mt-3">JÁ possui cadastro? <a href="index.php">Clique aqui</a>.</p>
+                <?php
+                // Exibe mensagens de erro ou sucesso
+                if (isset($error_message)) {
+                  echo '<div class="alert alert-danger" role="alert">' . $error_message . '</div>';
+                }
+                if (isset($success_message)) {
+                  echo '<div class="alert alert-success" role="alert">' . $success_message . '</div>';
+                }
+                ?>
 
             </form>
           </div>

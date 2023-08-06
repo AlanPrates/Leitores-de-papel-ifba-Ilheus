@@ -49,4 +49,3 @@ if (isset($_POST['livro_id'])) {
 // Redireciona de volta para a página de devolução de livros
 header("Location: devolve_livro.php?message=".urlencode($success_message ?? $error_message));
 exit;
-?>

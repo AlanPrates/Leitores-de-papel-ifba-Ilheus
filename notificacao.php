@@ -1,7 +1,8 @@
 <?php
 session_start();
-
+ob_start();
 include_once 'conexao.php';
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -45,19 +46,6 @@ function enviarNotificacao($email, $livro, $dataVencimento)
         echo 'Erro ao enviar o e-mail: ' . $e->getMessage();
         return false;
     }
-}
-
-// Conexão com o banco de dados (ajuste de acordo com a sua configuração)
-$servername = 'localhost';
-$username = 'root';
-$password = 'root';
-$dbname = 'biblioteca';
-
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Verifica a conexão
-if ($conn->connect_error) {
-    die('Conexão falhou: ' . $conn->connect_error);
 }
 
 // Consulta para obter empréstimos com data de entrega vencida

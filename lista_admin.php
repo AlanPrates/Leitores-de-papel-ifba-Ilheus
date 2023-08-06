@@ -35,7 +35,6 @@ $username = $_SESSION['admin_username'];
                 <ul>
                     <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
                     <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-                    <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
                 </ul>
             </div>
 
@@ -47,7 +46,6 @@ $username = $_SESSION['admin_username'];
             <ul>
                 <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
                 <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-                <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
             </ul>
         </div>
     </header>

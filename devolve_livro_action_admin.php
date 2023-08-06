@@ -24,12 +24,10 @@ if (isset($_POST['livro_id'])) {
     } else {
         $error_message = "Erro ao devolver o livro.";
     }
-
-
 } else {
     $error_message = "ID do livro não fornecido.";
 }
 
 // Redireciona de volta para a página de devolução de livros
-header("Location: devolve_livro_admin.php?message=".urlencode($success_message ?? $error_message));
+header("Location: devolve_livro_admin.php?message=" . urlencode($success_message ?? $error_message));
 exit;

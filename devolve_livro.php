@@ -42,6 +42,8 @@ if ($result && $result->num_rows > 0) {
             margin-top: 20px;
         }
     </style>
+
+
 </head>
 
 <body>
@@ -52,20 +54,19 @@ if ($result && $result->num_rows > 0) {
             </div>
             <div class="nav-list">
                 <ul>
-                    <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar Conta</a></li>
-                    <li class="nav-item"><a href="cadastro.php" class="nav-link">Acessar minhas leituras</a></li>
-                    <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador </a></li>
+                    <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
+                    <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
                 </ul>
             </div>
+
             <div class="mobile-menu-icon">
                 <button onclick="menuShow()"><img class="icon" src="assets/img/menu_white_36dp.svg" alt=""></button>
             </div>
         </nav>
         <div class="mobile-menu">
             <ul>
-                <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar Conta</a></li>
-                <li class="nav-item"><a href="cadastro.php" class="nav-link">Acessar Minhas Leituras</a></li>
-                <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
+                <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
+                <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
             </ul>
         </div>
     </header>
@@ -110,6 +111,52 @@ if ($result && $result->num_rows > 0) {
         <div class="alert alert-warning text-center mb-0 d-md-none" role="alert">
             Por favor, role a página horizontalmente para visualizar a tabela completa.
         </div>
+        <br>
+        <style>
+            /* Estilo para a caixa de comentário */
+            .comment-box:nth-child(odd) {
+                background-color: #f1f1f1;
+            }
+
+            .comment-box:nth-child(even) {
+                background-color: #eaeaea;
+            }
+        </style>
+
+        <?php foreach ($livros as $livro) { ?>
+            <div class="container mt-4">
+                <h3>Comentários sobre o livro "<?php echo $livro['titulo']; ?>":</h3>
+                <!-- Formulário para adicionar comentário -->
+                <form action="salvar_comentario_action.php" method="post">
+                    <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
+                    <div class="form-group">
+                        <textarea name="comentario" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar Comentário</button>
+                </form>
+
+                <div class="mt-4">
+                    <?php
+                    $livro_id = $livro['id'];
+                    $query_comentarios = "SELECT comentario FROM comentarios WHERE livro_id = '$livro_id'";
+                    $result_comentarios = $conn->query($query_comentarios);
+
+                    if ($result_comentarios && $result_comentarios->num_rows > 0) {
+                        while ($row_comentario = $result_comentarios->fetch_assoc()) {
+                    ?>
+                            <div class="card comment-box">
+                                <div class="card-body">
+                                    <strong>Usuário IFBA_Ilhéus comentou:</strong> <?php echo $row_comentario['comentario']; ?>
+                                </div>
+                            </div>
+                        <?php } ?>
+                    <?php } else { ?>
+                        <p>Nenhum comentário para este livro.</p>
+                    <?php } ?>
+                </div>
+            </div>
+        <?php } ?>
+        <br>
         <br>
         <div class="btn-group-vertical">
             <a href="aluno.php" class="btn btn-warning">Voltar para Painel de Usuário</a>

@@ -1,15 +1,13 @@
 <?php
-// Inicializar a sessão
 session_start();
+global $conn;
+include 'conexao.php';
 
-// Verificar se o usuário está logado, redirecionar para o login se não estiver
-if (!isset($_SESSION['username'])) {
-    header("Location: login_admin.php");
+// Verifica se o usuário não está logado
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
     exit;
 }
-
-// Exibir o nome de usuário
-$username = $_SESSION['username'];
 
 // Definir a categoria selecionada
 if (isset($_GET['categoria'])) {
@@ -54,7 +52,6 @@ if (isset($_GET['ordem']) && ($_GET['ordem'] == 'az' || $_GET['ordem'] == 'za'))
                 <ul>
                     <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
                     <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-                    <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
                 </ul>
             </div>
 
@@ -66,7 +63,6 @@ if (isset($_GET['ordem']) && ($_GET['ordem'] == 'az' || $_GET['ordem'] == 'za'))
             <ul>
                 <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
                 <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-                <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
             </ul>
         </div>
     </header>
@@ -98,9 +94,6 @@ if (isset($_GET['ordem']) && ($_GET['ordem'] == 'az' || $_GET['ordem'] == 'za'))
                 <input type="submit" value="Filtrar" class="btn btn-danger">
             </div>
         </form>
-
-
-
         <div class="table-responsive">
             <table class="table table-striped">
                 <thead>

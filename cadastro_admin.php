@@ -73,9 +73,8 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
         </div>
         <div class="nav-list">
           <ul>
-            <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar Conta</a></li>
+            <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
             <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
-            <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador </a></li>
           </ul>
         </div>
         <div class="mobile-menu-icon">
@@ -84,9 +83,8 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
       </nav>
       <div class="mobile-menu">
         <ul>
-          <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar Conta</a></li>
+          <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
           <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar Minhas Leituras</a></li>
-          <li class="nav-item"><a href="index_admin.php" class="nav-link">Acessar como Administrador</a></li>
         </ul>
       </div>
     </header>

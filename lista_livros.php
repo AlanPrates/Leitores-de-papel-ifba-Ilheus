@@ -95,8 +95,7 @@ if ($result && $result->num_rows > 0) {
             <div class="nav-list">
                 <ul>
                     <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                    <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-                    <li class="nav-item"><a href="loginAdmin.php" class="nav-link">Acessar como Administrador</a></li>
+                    <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
                 </ul>
             </div>
 
@@ -107,16 +106,15 @@ if ($result && $result->num_rows > 0) {
         <div class="mobile-menu">
             <ul>
                 <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-                <li class="nav-item"><a href="loginAdmin.php" class="nav-link">Acessar como Administrador</a></li>
+                <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
             </ul>
         </div>
     </header>
     <div class="container">
         <h2>Lista de Livros</h2>
         <div class="alert alert-warning" role="alert">
-    Total de Livros Disponíveis: <?php echo $total_disponivel; ?>
-</div>
+            Total de Livros Disponíveis: <?php echo $total_disponivel; ?>
+        </div>
 
         <form method="get" action="lista_livros.php">
             <div class="form-row">
