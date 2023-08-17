@@ -129,11 +129,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container d-flex justify-content-center align-items-center vh-100">
       <div class="shadow p-4">
         <h1 class="text-center mb-4">Página de Login</h1>
-        <?php if ($error !== "") { ?>
-          <div class="alert alert-danger mt-3 text-center" role="alert">
-            <?php echo $error; ?>
-          </div>
-        <?php } ?>
+          <!-- Exibir a mensagem de erro aqui -->
+          <?php if (isset($_GET['error']) && $_GET['error'] !== "") { ?>
+              <div class="alert alert-danger mt-3 text-center" role="alert">
+                  <?php echo $_GET['error']; ?>
+              </div>
+          <?php } ?>
         <form action="login.php" method="POST">
           <div class="form-group">
             <label for="usuario">
