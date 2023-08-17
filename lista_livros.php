@@ -194,10 +194,12 @@ if ($result && $result->num_rows > 0) {
                                             <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
                                             <input type="submit" class="btn btn-danger" value="Emprestar">
                                         </form>
+
                                     <?php } else { ?>
                                         Livro indisponível
                                     <?php } ?>
-
+                                    <br>
+                                    <br>
                                     <form method="POST" action="devolve_livro.php" style="display: inline;">
                                         <input type="hidden" name="livro_devolvido" value="<?php echo $livro['id']; ?>">
                                         <input type="submit" class="btn btn-warning" value="Devolver">

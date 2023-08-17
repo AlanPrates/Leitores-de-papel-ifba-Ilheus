@@ -111,21 +111,18 @@ $conn->close();
     </header>
     <div class="container">
         <?php
-        // Verifica se houve uma mensagem de erro
-        if (isset($error_message)) {
-            echo '<div class="alert alert-danger">' . $error_message . '</div>';
-        }
-
-        // Verifica se houve uma mensagem de sucesso
-        if (isset($success_message)) {
-            echo '<div class="alert alert-success">' . $success_message . '</div>';
+        if (isset($_POST['password'])) {
+            
+            // Verifica se houve uma mensagem de sucesso
+            if (isset($success_message)) {
+                echo '<div class="alert alert-success">' . $success_message . '</div>';
+            }
         }
         ?>
 
         <br>
         <h2 class="text-black">Atualizar meus dados</h2>
         <h2><span style="color: red;"><?php echo $username; ?></span></h2>
-
 
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
             <div class="form-group">

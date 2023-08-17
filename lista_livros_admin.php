@@ -217,6 +217,7 @@ if ($result && $result->num_rows > 0) {
                 <a href="lista_comentarios.php" class="btn btn-primary">Ver todos os comentários dos livros</a>
             <?php } ?>
         </div>
+        <br>
         <div class="btn-group-vertical">
             <div class="btn-group-vertical">
             </div>
