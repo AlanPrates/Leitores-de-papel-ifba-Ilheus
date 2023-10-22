@@ -1,2 +1,4 @@
-# leitores-de-papel-ifba
- Projeto em desenvolvimento por Alan Prates e Daniel Monteiro
+# Leitores de Papel - IFBA
+
+Projeto em desenvolvolvido por [Alan Prates](https://github.com/AlanPrates) e [Daniel Monteiro](https://github.com/DanielMonteiroo).
+
