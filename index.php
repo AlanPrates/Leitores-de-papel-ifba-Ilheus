@@ -10,8 +10,8 @@ if (isset($_SESSION['is_admin'])) {
   if ($_SESSION['is_admin']) {
     header("Location: admin.php");
   } else {
-    // Caso contrário, redirecionar para a página aluno.php
-    header("Location: aluno.php");
+    // Caso contrário, redirecionar para a página minhas_leituras.php
+    header("Location: minhas_leituras.php");
   }
   exit;
 }
@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if ($_SESSION['is_admin']) {
           header("Location: admin.php");
         } else {
-          header("Location: aluno.php");
+          header("Location: minhas_leituras.php");
         }
         exit;
       } else {
@@ -110,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <div class="nav-list">
             <ul>
               <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-              <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
             </ul>
           </div>
           <div class="mobile-menu-icon">
@@ -120,7 +119,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="mobile-menu">
           <ul>
             <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-            <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
+
           </ul>
         </div>
       </header>
@@ -129,6 +128,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="container d-flex justify-content-center align-items-center vh-100">
       <div class="shadow p-4">
         <h1 class="text-center mb-4">Página de Login</h1>
+        <?php
+if (isset($_GET['success_message']) && $_GET['success_message'] !== "") {
+  echo '<div class="alert alert-success mt-3 text-center" role="alert">';
+  echo $_GET['success_message'];
+  echo '</div>';
+}
+?>
+
           <!-- Exibir a mensagem de erro aqui -->
           <?php if (isset($_GET['error']) && $_GET['error'] !== "") { ?>
               <div class="alert alert-danger mt-3 text-center" role="alert">
@@ -173,14 +180,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
         </div>
         <div class="alert alert-warning text-center" role="alert">
-          Usuário: alanj
+          Usuário Admin: admin
           <br>
-          Senha: 123
-        </div>
-        <div class="alert alert-warning text-center" role="alert">
-          Usuário Admin: alan
-          <br>
-          Senha: 123
+          Senha: admin
         </div>
       </div>
     </div>

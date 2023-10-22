@@ -117,7 +117,7 @@ if ($result && $result->num_rows > 0) {
         <a href="logout.php" class="btn btn-danger">Sair</a>
     </div>
     <script src="assets/js/script.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <?php
     // Inclui o rodapé
     include 'rodape.php';

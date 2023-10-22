@@ -11,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 // Obtém os livros emprestados pelo usuário atual
-$query = "SELECT livros.id, livros.titulo, livros.autor, livros.ano_publicacao, livros_emprestados.data_emprestimo, livros_emprestados.data_devolucao
+$query = "SELECT livros.id, livros.titulo, livros.autor, livros.ano_publicacao, livros.isbn, livros.genero, livros_emprestados.data_emprestimo, livros_emprestados.data_devolucao
           FROM livros_emprestados
           INNER JOIN livros ON livros_emprestados.livro_id = livros.id
           WHERE livros_emprestados.user_id = '$user_id'";
@@ -55,7 +55,7 @@ if ($result && $result->num_rows > 0) {
             <div class="nav-list">
                 <ul>
                     <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                    <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
+                    <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar minhas leituras</a></li>
                 </ul>
             </div>
 
@@ -66,7 +66,7 @@ if ($result && $result->num_rows > 0) {
         <div class="mobile-menu">
             <ul>
                 <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
+                <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar minhas leituras</a></li>
             </ul>
         </div>
     </header>
@@ -80,6 +80,8 @@ if ($result && $result->num_rows > 0) {
                             <th>Título</th>
                             <th>Autor</th>
                             <th>Ano de Publicação</th>
+                            <th>ISBN</th>
+                            <th>Genero</th>
                             <th>Data de Empréstimo</th>
                             <th>Data da Devolução</th>
                             <th>Ação</th>
@@ -91,8 +93,12 @@ if ($result && $result->num_rows > 0) {
                                 <td><?php echo $livro['titulo']; ?></td>
                                 <td><?php echo $livro['autor']; ?></td>
                                 <td><?php echo $livro['ano_publicacao']; ?></td>
-                                <td><?php echo $livro['data_emprestimo']; ?></td>
-                                <td><?php echo date('Y-m-d', strtotime($livro['data_emprestimo'] . '+15 days')); ?></td>
+                                <td><?php echo $livro['isbn']; ?></td>
+                                <td><?php echo $livro['genero']; ?></td>
+                          <td><?php echo date('d/m/Y', strtotime($livro['data_emprestimo'])); ?></td>
+      
+<td><?php echo date('d/m/Y', strtotime($livro['data_emprestimo'] . '+1 days')); ?></td>
+
                                 <td>
                                     <form method="POST" action="devolve_livro_action.php">
                                         <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
@@ -103,7 +109,7 @@ if ($result && $result->num_rows > 0) {
                         <?php } ?>
                     </tbody>
                 </table>
-            </div>
+            </div>                      
         <?php } else { ?>
             <p>Nenhum livro emprestado.</p>
         <?php } ?>
@@ -136,30 +142,50 @@ if ($result && $result->num_rows > 0) {
                 </form>
 
                 <div class="mt-4">
+
                     <?php
+
                     $livro_id = $livro['id'];
-                    $query_comentarios = "SELECT comentario FROM comentarios WHERE livro_id = '$livro_id'";
+
+                    
+                    $query_comentarios = "SELECT c.comentario, u.username FROM comentarios c, usuarios u WHERE livro_id = '$livro_id' and c.user_id=u.id";
+
                     $result_comentarios = $conn->query($query_comentarios);
 
+
+
                     if ($result_comentarios && $result_comentarios->num_rows > 0) {
+
                         while ($row_comentario = $result_comentarios->fetch_assoc()) {
+
                     ?>
+
                             <div class="card comment-box">
+
                                 <div class="card-body">
-                                    <strong>Usuário IFBA_Ilhéus comentou:</strong> <?php echo $row_comentario['comentario']; ?>
+
+                                    <strong><?php echo $row_comentario['username'] . ' comentou: '; ?></strong> <?php echo $row_comentario['comentario']; ?>
+
                                 </div>
+
                             </div>
+
                         <?php } ?>
+
                     <?php } else { ?>
+
                         <p>Nenhum comentário para este livro.</p>
+
                     <?php } ?>
+
                 </div>
+
             </div>
         <?php } ?>
         <br>
         <br>
         <div class="btn-group-vertical">
-            <a href="aluno.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
+            <a href="minhas_leituras.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
             <br>
             <a href="lista_livros.php" class="btn btn-warning">Voltar para Lista de Livros</a>
             <br>
@@ -167,7 +193,7 @@ if ($result && $result->num_rows > 0) {
         </div>
     </div>
     <script src="assets/js/script.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <?php
     // Inclui o rodapé
     include 'rodape.php';

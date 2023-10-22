@@ -2,6 +2,7 @@
 session_start();
 global $conn;
 include 'conexao.php';
+
 // Processamento do formulário
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo = $_POST["titulo"];
@@ -9,10 +10,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $ano = $_POST["ano"];
     $editora = $_POST["editora"];
     $quantidade = $_POST["quantidade"];
+    $isbn = $_POST["isbn"];
+    $genero = $_POST["genero"];
 
     // Inserir o livro no banco de dados
-    $sql = "INSERT INTO livros (titulo, autor, ano_publicacao, editora, disponivel, quantidade) 
-            VALUES ('$titulo', '$autor', '$ano', '$editora', 1, $quantidade)";
+    $sql = "INSERT INTO livros (titulo, autor, ano_publicacao, editora, disponivel, quantidade, isbn, genero) 
+            VALUES ('$titulo', '$autor', '$ano', '$editora', 1, $quantidade, '$isbn', '$genero')";
 
     if ($conn->query($sql) === TRUE) {
         echo "Livro cadastrado com sucesso.";

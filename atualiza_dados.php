@@ -94,7 +94,7 @@ $conn->close();
             <div class="nav-list">
                 <ul>
                     <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                    <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
+                    <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar minhas leituras</a></li>
                 </ul>
             </div>
 
@@ -105,7 +105,7 @@ $conn->close();
         <div class="mobile-menu">
             <ul>
                 <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-                <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
+                <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar minhas leituras</a></li>
             </ul>
         </div>
     </header>
@@ -132,12 +132,12 @@ $conn->close();
 
 
             <div class="form-group">
-                <label for="email">Nova E-mail:</label>
+                <label for="email">E-mail:</label>
                 <input type="email" class="form-control" name="email" value="<?php echo isset($emailValue) ? $emailValue : ''; ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="categoria">Nova Categoria:</label>
+                <label for="categoria">Categoria:</label>
                 <select class="form-control" name="categoria" required>
                     <option value="Aluno" <?php echo isset($categoriaValue) && $categoriaValue == 'Aluno' ? 'selected' : ''; ?>>Aluno</option>
                     <option value="Professor" <?php echo isset($categoriaValue) && $categoriaValue == 'Professor' ? 'selected' : ''; ?>>Professor</option>
@@ -146,12 +146,12 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="matricula">Nova Matrícula:</label>
+                <label for="matricula">Matrícula:</label>
                 <input type="text" class="form-control" name="matricula" value="<?php echo isset($matriculaValue) ? $matriculaValue : ''; ?>" required>
             </div>
 
             <div class="form-group">
-                <label for="sexo">Novo Sexo:</label>
+                <label for="sexo">Sexo:</label>
                 <select class="form-control" name="sexo" required>
                     <option value="Masculino" <?php echo isset($sexoValue) && $sexoValue == 'Masculino' ? 'selected' : ''; ?>>Masculino</option>
                     <option value="Feminino" <?php echo isset($sexoValue) && $sexoValue == 'Feminino' ? 'selected' : ''; ?>>Feminino</option>
@@ -160,19 +160,19 @@ $conn->close();
             </div>
 
             <div class="form-group">
-                <label for="telefone">Novo Telefone:</label>
+                <label for="telefone">Telefone:</label>
                 <input type="text" class="form-control" name="telefone" value="<?php echo isset($telefoneValue) ? $telefoneValue : ''; ?>" required>
             </div>
 
             <div class="btn-group-vertical">
                 <button type="submit" class="btn btn-danger">Atualizar Dados</button>
                 <br>
-                <a href="aluno.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
+                <a href="minhas_leituras.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
             </div>
         </form>
     </div>
     <script src="assets/js/script.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <?php
     // Inclui o rodapé
     include 'rodape.php';

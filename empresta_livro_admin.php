@@ -18,7 +18,7 @@ if (isset($_POST['livro_id'])) {
     $data_emprestimo = date('Y-m-d H:i:s');
 
     // Calcular a data de devolução (adicionar 15 dias à data atual)
-    $data_devolucao = date('Y-m-d H:i:s', strtotime('+15 days'));
+    $data_devolucao = date('Y-m-d H:i:s', strtotime('+1 days'));
 
     // Verifica a quantidade disponível do livro
     $query = "SELECT quantidade FROM livros WHERE id = '$livro_id'";
@@ -114,7 +114,7 @@ if (isset($_POST['livro_id'])) {
 
     </div>
     <script src="assets/js/script.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <?php
     // Inclui o rodapé
     include 'rodape.php';

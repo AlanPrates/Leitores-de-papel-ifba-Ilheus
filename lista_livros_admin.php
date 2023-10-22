@@ -50,13 +50,21 @@ if ($filtroOrdem == 'az') {
 
 $result = $conn->query($query);
 
-// Verifica se existem livros cadastrados
 if ($result && $result->num_rows > 0) {
     $livros = $result->fetch_all(MYSQLI_ASSOC);
-} else {
-    $livros = [];
-}
 
+    // Implementação da paginação
+    $pagina = isset($_GET['pagina']) ? $_GET['pagina'] : 1;
+    $livros_por_pagina = 15;
+    $num_livros = count($livros);
+    $num_paginas = ceil($num_livros / $livros_por_pagina);
+    $offset = ($pagina - 1) * $livros_por_pagina;
+
+    // Filtra os livros de acordo com a página atual
+    $livros_paginados = array_slice($livros, $offset, $livros_por_pagina);
+} else {
+    $livros_paginados = [];
+}
 
 ?>
 
@@ -66,7 +74,7 @@ if ($result && $result->num_rows > 0) {
 <head>
     <title>Lista de Livros</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="assets/menu-mobile-css/style.css">
     <link rel="stylesheet" href="assets/css/rodape.css">
@@ -115,6 +123,24 @@ if ($result && $result->num_rows > 0) {
         <div class="alert alert-warning" role="alert">
             Total de Livros Disponíveis: <?php echo $total_disponivel; ?>
         </div>
+        <!-- Adicione após a consulta SQL para obter o total de quantidade de livros disponíveis -->
+        <?php if (isset($_GET['success']) && $_GET['success'] == 'true') : ?>
+        <div class="alert alert-success" role="alert">
+            Livro atualizado com sucesso!
+        </div>
+    <?php endif; ?>
+        <?php
+        if (isset($_SESSION['success_message'])) {
+            echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';
+            unset($_SESSION['success_message']);
+        }
+
+        if (isset($_SESSION['error_message'])) {
+            echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error_message'] . '</div>';
+            unset($_SESSION['error_message']);
+        }
+        ?>
+
         <form method="get" action="lista_livros_admin.php">
             <div class="form-row">
                 <div class="col-md-4 mb-3">
@@ -148,8 +174,18 @@ if ($result && $result->num_rows > 0) {
             </div>
             <button class="btn btn-warning" type="submit">Filtrar</button>
         </form>
-
-        <?php if (!empty($livros)) { ?>
+        <br>
+        <div class="btn-group-vertical">
+            <div class="btn-group-vertical">
+            </div>
+            <a href="admin.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
+            <br>
+            <a href="cadastro_livro_admin.php" class="btn btn-warning">Cadastro de Livros</a>
+            <br>
+            <a href="logout.php" class="btn btn-danger">Sair</a>
+        </div>
+        <!-- Adiciona a tabela com os livros paginados -->
+        <?php if (!empty($livros_paginados)) { ?>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -157,16 +193,18 @@ if ($result && $result->num_rows > 0) {
                             <th>Título</th>
                             <th>Autor</th>
                             <th>Ano de Publicação</th>
+                            <th>ISBN</th>
+                            <th>Genero</th>
                             <th>Quantidade</th>
                             <th>Disponível</th>
                             <th>Ação</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php
-                        foreach ($livros as $livro) {
+                        <?php foreach ($livros_paginados as $livro) {
                             $quantidade = $livro['quantidade']; // Obtém a quantidade do livro
                             $disponivel = ($quantidade > 0) ? 'Sim' : 'Não'; // Verifica se o livro está disponível
+
 
                             // Atualiza a quantidade do livro quando emprestado ou devolvido
                             if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id']) && $_POST['livro_id'] == $livro['id']) {
@@ -185,6 +223,8 @@ if ($result && $result->num_rows > 0) {
                                 <td><?php echo $livro['titulo']; ?></td>
                                 <td><?php echo $livro['autor']; ?></td>
                                 <td><?php echo $livro['ano_publicacao']; ?></td>
+                                <td><?php echo $livro['isbn']; ?></td>
+                                <td><?php echo $livro['genero']; ?></td>
                                 <td><?php echo $quantidade; ?></td>
                                 <td><?php echo $disponivel; ?></td>
                                 <td>
@@ -193,9 +233,17 @@ if ($result && $result->num_rows > 0) {
                                         Livro indisponível
                                     <?php } ?>
 
+                                    <!-- Botão Editar -->
                                     <form method="GET" action="editar_livro_admin.php" style="display: inline;">
                                         <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
-                                        <input type="submit" class="btn btn-primary" value="Editar Livro">
+                                        <input type="submit" class="btn btn-primary" value="Editar Livro ">
+                                    </form>
+                                    <br>
+                                    <br>
+                                    <!-- Botão Excluir -->
+                                    <form method="POST" action="excluir_livro.php" style="display: inline;">
+                                        <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
+                                        <input type="submit" class="btn btn-danger" value="Excluir Livro">
                                     </form>
                                 </td>
                             </tr>
@@ -210,23 +258,26 @@ if ($result && $result->num_rows > 0) {
         <div class="alert alert-warning text-center mb-0 d-md-none" role="alert">
             Por favor, role a página horizontalmente para visualizar a tabela completa.
         </div>
-        <br>
         <!-- Após o loop que exibe os comentários do livro -->
         <div class="mt-4">
             <?php if (isset($_SESSION['admin_username'])) { ?>
-                <a href="lista_comentarios.php" class="btn btn-primary">Ver todos os comentários dos livros</a>
+                <a href="lista_comentarios.php" class="btn btn-primary">Ver os comentários dos livros</a>
             <?php } ?>
         </div>
         <br>
-        <div class="btn-group-vertical">
-            <div class="btn-group-vertical">
-            </div>
-            <a href="admin.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
-            <br>
-            <a href="cadastro_livro_admin.php" class="btn btn-warning">Cadastro de Livros</a>
-            <br>
-            <a href="logout.php" class="btn btn-danger">Sair</a>
-        </div>
+        <?php if ($num_paginas > 1) : ?>
+            <nav aria-label="Navegação de página">
+                <ul class="pagination">
+                    <?php for ($i = 1; $i <= $num_paginas; $i++) : ?>
+                        <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
+                            <a class="page-link" href="lista_livros_admin.php?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
+                        </li>
+                    <?php endfor; ?>
+                </ul>
+            </nav>
+        <?php endif; ?>
+
+
     </div>
     <script src="assets/js/script.js"></script>
     <?php

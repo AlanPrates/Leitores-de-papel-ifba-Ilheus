@@ -56,7 +56,7 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
   <title>Leitores de Papel</title>
   <!-- Estilos CSS -->
   <link rel="stylesheet" href="assets/menu-mobile-css/style.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <!-- Ícones -->
   <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
   <!-- Ícones -->
@@ -74,7 +74,7 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
         <div class="nav-list">
           <ul>
             <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-            <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar minhas leituras</a></li>
+            <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar minhas leituras</a></li>
           </ul>
         </div>
         <div class="mobile-menu-icon">
@@ -84,7 +84,7 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
       <div class="mobile-menu">
         <ul>
           <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-          <li class="nav-item"><a href="aluno.php" class="nav-link">Acessar Minhas Leituras</a></li>
+          <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar Minhas Leituras</a></li>
         </ul>
       </div>
     </header>
@@ -134,9 +134,11 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
               <input type="email" class="form-control" id="email" name="email" required>
             </div>
             <div class="form-group">
-              <label for="usuario">Usuário<span class="text-danger">*</span>:</label>
-              <input type="text" class="form-control" id="usuario" name="admin_username" required>
-            </div>
+    <label for="usuario">Usuário<span class="text-danger">*</span>:</label>
+    <input type="text" class="form-control" id="usuario" name="admin_username" required>
+    <div id="verificar-usuario"></div>
+</div>
+
             <div class="form-group">
               <label for="senha">Senha<span class="text-danger">*</span>:</label>
               <div class="input-group">
@@ -184,10 +186,12 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
 
 
   </section>
+
+  <script src="js/verificar_usuario.js"></script>
   <script src="js/index.js"></script>
   <script src="js/password.js"></script>
   <script src="assets/js/script.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
   <?php
   // Inclui o rodapé
   include 'rodape.php';

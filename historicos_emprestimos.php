@@ -139,6 +139,7 @@ $result_historico = $conn->query($sql_historico);
         <a href="logout.php" class="btn btn-danger">Sair</a>
     </div>
     <br>
+    <script src="js/atualizar_emprestimo.js"></script>
     <script src="js/bootstrap.bundle.min.js"></script>
     <script src="assets/menu-mobile-js/script.js"></script>
     <?php

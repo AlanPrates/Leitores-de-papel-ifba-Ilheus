@@ -74,59 +74,67 @@ session_start();
             }
             ?>
             <br>
-            <div class="row">
-                <div class="col-sm-12">
-                    <a href="atualiza_dados-admin.php" class="btn btn-warning">Editar meus dados</a>
-                </div>
-            </div>
-            <br>
-            <a href="lista_livros_admin.php" class="btn btn-warning">Listar Livros</a>
-        </div>
-    </div>
-    <br>
+            <div class="container">
     <div class="row">
-        <div class="col-sm-12">
-            <a href="cadastro_livro_admin.php" class="btn btn-warning">Cadastro de Livros</a>
+        <!-- Coluna 1 -->
+        <div class="col-md-3">
+            <a href="atualiza_dados-admin.php" class="btn btn-warning btn-block">Editar meus dados</a>
+        </div>
+        <br>
+        <br>
+        <!-- Coluna 2 -->
+        <div class="col-md-3">
+            <a href="lista_livros_admin.php" class="btn btn-warning btn-block">Listar Livros</a>
+        </div>
+        <br>
+        <br>
+        <!-- Coluna 3 -->
+        <div class="col-md-3">
+            <a href="cadastro_livro_admin.php" class="btn btn-warning btn-block">Cadastro de Livros</a>
+        </div>
+        <br>
+        <br>
+        <!-- Coluna 4 -->
+        <div class="col-md-3">
+            <a href="informacoes_usuarios_admin.php" class="btn btn-warning btn-block">Relatório de Empréstimos</a>
         </div>
     </div>
-    <br>
+<br>
     <div class="row">
-        <div class="col-sm-12">
-            <a href="informacoes_usuarios_admin.php" class="btn btn-warning">Relatório de Empréstimos</a>
+        <!-- Coluna 1 -->
+        <div class="col-md-3">
+            <a href="historicos_emprestimos.php" class="btn btn-warning btn-block">Historicos de Empréstimos</a>
         </div>
+        <br>
+        <br>
+        <!-- Coluna 2 -->
+        <div class="col-md-3">
+            <a href="lista_admin.php" class="btn btn-warning btn-block">Listar Administradores</a>
+        </div>
+        <br>
+        <br>
+        <!-- Coluna 3 -->
+        <div class="col-md-3">
+            <a href="cadastro_admin.php" class="btn btn-warning btn-block">Cadastrar Administrador</a>
+        </div>
+        <br>
+        <br>
+        <!-- Coluna 4 -->
+        <div class="col-md-3">
+            <a href="lista_usuarios.php" class="btn btn-warning btn-block">Listar Usuarios</a>
+        </div>
+        <br>
+        <br>
     </div>
-    <br>
+    
     <div class="row">
-        <div class="col-sm-12">
-            <a href="historicos_emprestimos.php" class="btn btn-warning">Historicos de Empréstimos</a>
+        <!-- Coluna 1 -->
+        <div class="col-md-3">
+            <a href="logout.php" class="btn btn-danger btn-block btn-sm">Sair</a>
         </div>
     </div>
-    <br>
-    <div class="row">
-        <div class="col-sm-12">
-            <a href="lista_admin.php" class="btn btn-warning">Listar Administradores</a>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-sm-12">
-            <a href="cadastro_admin.php" class="btn btn-warning">Cadastrar Administrador</a>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-sm-12">
-            <a href="lista_usuarios.php" class="btn btn-warning">Listar Usuarios</a>
-        </div>
-    </div>
-    <br>
-    <div class="row">
-        <div class="col-sm-12">
-            <a href="logout.php">
-                <input type="button" class="btn btn-danger" value="  Sair  " />
-            </a>
-        </div>
-    </div>
+</div>
+
     <script src="assets/js/script.js"></script>
     <?php
     // Inclui o rodapé

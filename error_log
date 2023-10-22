@@ -1,17 +1,54 @@
-[27-Jun-2023 19:00:05 America/Sao_Paulo] PHP Notice:  Trying to get property 'num_rows' of non-object in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_admin.php on line 76
-[27-Jun-2023 19:00:26 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_usuarios.php on line 120
-[27-Jun-2023 19:02:25 America/Sao_Paulo] PHP Notice:  Trying to get property 'num_rows' of non-object in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_admin.php on line 76
-[27-Jun-2023 19:03:57 America/Sao_Paulo] PHP Notice:  Trying to get property 'num_rows' of non-object in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_admin.php on line 76
-[27-Jun-2023 19:04:00 America/Sao_Paulo] PHP Notice:  Trying to get property 'num_rows' of non-object in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_admin.php on line 76
-[27-Jun-2023 19:05:34 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_usuarios.php on line 120
-[27-Jun-2023 19:06:53 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_usuarios.php on line 122
-[27-Jun-2023 19:06:57 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_usuarios.php on line 122
-[27-Jun-2023 19:06:58 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_usuarios.php on line 122
-[27-Jun-2023 19:06:59 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_usuarios.php on line 122
-[27-Jun-2023 19:20:32 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualiza_dados.php on line 42
-[27-Jun-2023 19:24:41 America/Sao_Paulo] PHP Warning:  mysqli::query(): Couldn't fetch mysqli in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualiza_dados-admin.php on line 42
-[27-Jun-2023 19:33:12 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualiza_dados.php on line 42
-[29-Jun-2023 20:04:01 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /home3/alanpra2/public_html/leitores-de-papel-ifba/historicos_emprestimos.php on line 101
-[29-Jun-2023 20:04:01 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /home3/alanpra2/public_html/leitores-de-papel-ifba/historicos_emprestimos.php on line 102
-[29-Jun-2023 20:04:13 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /home3/alanpra2/public_html/leitores-de-papel-ifba/historicos_emprestimos.php on line 101
-[29-Jun-2023 20:04:13 America/Sao_Paulo] PHP Notice:  Trying to access array offset on value of type null in /home3/alanpra2/public_html/leitores-de-papel-ifba/historicos_emprestimos.php on line 102
+[26-Sep-2023 22:09:44 America/Sao_Paulo] PHP Warning:  mysqli::__construct(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php on line 11
+[26-Sep-2023 22:10:43 America/Sao_Paulo] PHP Notice:  Undefined variable: conn in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php on line 20
+[26-Sep-2023 22:10:43 America/Sao_Paulo] PHP Notice:  Trying to get property 'connect_error' of non-object in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php on line 20
+[26-Sep-2023 22:10:43 America/Sao_Paulo] PHP Notice:  Undefined variable: conn in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php on line 32
+[26-Sep-2023 22:10:43 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php:32
+Stack trace:
+#0 {main}
+  thrown in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php on line 32
+[26-Sep-2023 22:11:59 America/Sao_Paulo] PHP Fatal error:  Uncaught Error: Call to a member function query() on null in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php:26
+Stack trace:
+#0 {main}
+  thrown in /home3/alanpra2/public_html/leitores-de-papel-ifba/devolve_livro.php on line 26
+[09-Oct-2023 19:09:03 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros.php on line 340
+[09-Oct-2023 19:39:14 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 07:16:42 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 07:18:10 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 07:58:28 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 07:58:38 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 08:00:07 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 16:09:58 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 16:10:15 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[10-Oct-2023 17:21:58 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 08:59:00 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 09:37:36 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 09:38:17 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 09:38:22 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 09:38:49 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 09:38:58 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 09:39:07 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 242
+[11-Oct-2023 14:22:15 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:22:26 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:22:33 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:22:41 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:25:31 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:25:38 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:43:11 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:43:23 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:43:32 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:43:38 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:52:07 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 14:52:24 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 15:24:17 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 15:24:23 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 15:24:38 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 15:24:44 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 15:24:51 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[11-Oct-2023 15:27:14 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 268
+[11-Oct-2023 15:27:23 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 268
+[11-Oct-2023 15:27:27 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 268
+[11-Oct-2023 15:27:30 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 268
+[11-Oct-2023 15:27:32 America/Sao_Paulo] PHP Notice:  Undefined variable: num_paginas in /home3/alanpra2/public_html/leitores-de-papel-ifba/lista_livros_admin.php on line 268
+[11-Oct-2023 15:28:30 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[13-Oct-2023 11:48:44 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20
+[13-Oct-2023 11:48:55 America/Sao_Paulo] PHP Notice:  Undefined index: disponivel in /home3/alanpra2/public_html/leitores-de-papel-ifba/atualizar_livro.php on line 20

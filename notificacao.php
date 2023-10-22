@@ -21,19 +21,21 @@ function enviarNotificacao($email, $livro, $dataVencimento)
     try {
         // Configurações do servidor SMTP (substitua pelas suas configurações)
         $mail->isSMTP();
-        $mail->Host       = 'smtp-relay.brevo.com';
+        $mail->Host       = '';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'nzgamebr@gmail.com';
-        $mail->Password   = '0LQ98cwOraSE7RX2';
+        $mail->Username   = '';
+        $mail->Password   = '';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        // Configurações do e-mail
-        $mail->setFrom('nzgamebr@gmail.com', 'Nome do Remetente');
-        $mail->addAddress($email); // Endereço do destinatário
-        $mail->isHTML(true);
-        $mail->Subject = 'Notificação de Vencimento de Entrega de Livro';
-        $mail->Body    = 'Olá, <strong>' . $email . '</strong>. Este é um lembrete de que o livro <strong>' . $livro . '</strong> deve ser devolvido até ' . $dataVencimento . '.';
+// Configurações do e-mail
+$mail->setFrom('', 'Nome do Remetente');
+$mail->addAddress($email); // Endereço do destinatário
+$mail->CharSet = 'UTF-8'; // Define o conjunto de caracteres
+$mail->isHTML(true);
+$mail->Subject = 'Notificação de Vencimento de Entrega de Livro';
+$mail->Body    = 'Olá, <strong>' . $email . '</strong>. Este é um lembrete de que o livro <strong>' . $livro . '</strong> deve ser devolvido até ' . $dataVencimento . '.';
+
 
         // Envia o e-mail
         if ($mail->send()) {

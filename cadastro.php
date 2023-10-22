@@ -24,11 +24,17 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     $error_message = "As senhas não coincidem. Por favor, digite novamente.";
   } else {
     if ($conn) {
-      // Verifica se o nome de usuário já existe no banco de dados
-      $query_check = "SELECT * FROM usuarios WHERE username = '$username'";
-      $result_check = $conn->query($query_check);
+      // Verifica se o nome de usuário já existe na tabela 'usuarios'
+      $query_check_users = "SELECT * FROM usuarios WHERE username = '$username'";
+      $result_check_users = $conn->query($query_check_users);
 
-      if ($result_check && $result_check->num_rows > 0) {
+      // Verifica se o nome de usuário já existe na tabela 'admin'
+      $query_check_admin = "SELECT * FROM admin WHERE admin_username = '$username'";
+      $result_check_admin = $conn->query($query_check_admin);
+
+      if ($result_check_users && $result_check_users->num_rows > 0) {
+        $error_message = "Nome de usuário já existe. Por favor, escolha outro nome de usuário.";
+      } elseif ($result_check_admin && $result_check_admin->num_rows > 0) {
         $error_message = "Nome de usuário já existe. Por favor, escolha outro nome de usuário.";
       } else {
         // Criptografa a senha usando a função password_hash
@@ -38,7 +44,14 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         $query_insert = "INSERT INTO usuarios (username, nome, password, email, categoria, matricula, datanascimento, sexo, telefone) VALUES ('$username', '$nome', '$hashedPassword', '$email', '$categoria', '$matricula', '$datanascimento', '$sexo', '$telefone')";
 
         if ($conn->query($query_insert)) {
-          $success_message = "Usuário registrado com sucesso! Só logar...";
+
+
+          // Adiciona o script de redirecionamento apenas se o cadastro for bem-sucedido
+          echo '<script>
+                  setTimeout(function() {
+                    window.location.href = "index.php?success_message=Cadastro realizado com sucesso! Só logar...";
+                  }, 1000);
+                </script>';
         } else {
           $error_message = "Erro ao registrar o usuário: " . $conn->error;
         }
@@ -62,7 +75,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
   <title>Leitores de Papel</title>
   <!-- Estilos CSS -->
   <link rel="stylesheet" href="assets/menu-mobile-css/style.css">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="css/bootstrap.min.css">
   <!-- Ícones -->
   <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
   <!-- Ícones -->
@@ -142,6 +155,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
               <div class="form-group">
                 <label for="usuario">Usuário<span class="text-danger">*</span>:</label>
                 <input type="text" class="form-control" id="usuario" name="username" required>
+                <div id="verificar-usuario"></div>
               </div>
               <div class="form-group">
                 <label for="senha">Senha<span class="text-danger">*</span>:</label>
@@ -191,10 +205,12 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
     </div>
 
   </section>
+
+  <script src="js/verificar_usuario.js"></script>
   <script src="js/password.js"></script>
   <script src="js/index.js"></script>
   <script src="assets/js/script.js"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script src="js/bootstrap.min.js"></script>
   <?php
   // Inclui o rodapé
   include 'rodape.php';
