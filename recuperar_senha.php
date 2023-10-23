@@ -48,7 +48,7 @@ $mail = new PHPMailer(true);
             </ul>
         </div>
     </header>
-    <div class="container mt-5">
+    <div class="container d-flex justify-content-center align-items-center vh-100">
     <div class="shadow p-4"> <!-- Adicionado a classe 'shadow' -->
         <div class="text-center mt-3">
     <h1>Recuperar Senha</h1>
@@ -134,7 +134,7 @@ $mail = new PHPMailer(true);
             } ?>
 
             <div class="form-group text-center mt-3">
-                <input type="text" name="email" id="email" class="form-control" placeholder="Digite o E-Mail" value="<?php echo $email; ?>" style="width: 250px; margin: 0 auto;">
+                <input type="text" name="email" id="email" class="form-control" placeholder="Digite o E-Mail" value="<?php echo $email; ?>" style="width: 300px; margin: 0 auto;">
             </div>
 
             <input type="submit" value="Recuperar" name="SendRecupSenha" class="btn btn-primary">
