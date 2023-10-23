@@ -18,7 +18,7 @@ $mail = new PHPMailer(true);
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/menu-mobile-css/style.css">
     <link rel="stylesheet" href="css/bootstrap.css">
     <title>Recuperar Senha</title>
@@ -48,7 +48,11 @@ $mail = new PHPMailer(true);
             </ul>
         </div>
     </header>
+    <div class="container mt-5">
+    <div class="shadow p-4"> <!-- Adicionado a classe 'shadow' -->
+        <div class="text-center mt-3">
     <h1>Recuperar Senha</h1>
+    </div>
     <?php
     $dados = filter_input_array(INPUT_POST, FILTER_DEFAULT);
 
@@ -115,33 +119,32 @@ $mail = new PHPMailer(true);
         }
     }
 
-    if (isset($_SESSION['msg_rec'])) {
-        echo $_SESSION['msg_rec'];
-        unset($_SESSION['msg_rec']);
-    }
+        if (isset($_SESSION['msg_rec'])) {
+            echo $_SESSION['msg_rec'];
+            unset($_SESSION['msg_rec']);
+        }
 
-    ?>
+        ?>
 
-    <form method="POST" action="" style="text-align: center;">
-        <?php
-        $email = "";
-        if (isset($dados['email'])) {
-            $email = $dados['email'];
-        } ?>
+        <form method="POST" action="" class="text-center">
+            <?php
+            $email = "";
+            if (isset($dados['email'])) {
+                $email = $dados['email'];
+            } ?>
 
-        <div class="form-group">
-            <label for="email">E-mail</label>
-            <input type="text" name="email" id="email" class="form-control" placeholder="Digite o E-Mail" value="<?php echo $email; ?>">
+            <div class="form-group text-center mt-3">
+                <input type="text" name="email" id="email" class="form-control" placeholder="Digite o E-Mail" value="<?php echo $email; ?>" style="width: 250px; margin: 0 auto;">
+            </div>
+
+            <input type="submit" value="Recuperar" name="SendRecupSenha" class="btn btn-primary">
+        </form>
+
+        <div class="text-center mt-3">
+            Lembrou? <a href="index.php">clique aqui</a> para logar
         </div>
-
-        <input type="submit" value="Recuperar" name="SendRecupSenha" class="btn btn-primary">
-    </form>
-
-    <br>
-
-    <div style="text-align: center;">
-        Lembrou? <a href="index.php">clique aqui</a> para logar
     </div>
+</div>
 
     <!-- Scripts JavaScript -->
     <script src="assets/js/script.js"></script>
