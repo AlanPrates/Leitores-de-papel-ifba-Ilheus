@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           </div>
           <div class="nav-list">
             <ul>
-              <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
+              <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
             </ul>
           </div>
           <div class="mobile-menu-icon">
@@ -118,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         </nav>
         <div class="mobile-menu">
           <ul>
-            <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
+            <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
 
           </ul>
         </div>
