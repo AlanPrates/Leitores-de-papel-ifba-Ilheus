@@ -23,8 +23,8 @@ function enviarNotificacao($email, $livro, $dataDevolucao)
         $mail->isSMTP();
         $mail->Host       = 'smtp-relay.brevo.com';
         $mail->SMTPAuth   = true;
-        $mail->Username   = 'nzgamebr@gmail.com';
-        $mail->Password   = '0LQ98cwOraSE7RX2';
+        $mail->Username   = '';
+        $mail->Password   = '';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
