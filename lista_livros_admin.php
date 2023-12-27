@@ -74,7 +74,7 @@ if ($result && $result->num_rows > 0) {
 <head>
     <title>Lista de Livros</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="assets/menu-mobile-css/style.css">
     <link rel="stylesheet" href="assets/css/rodape.css">

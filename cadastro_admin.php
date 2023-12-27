@@ -56,7 +56,7 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
   <title>Leitores de Papel</title>
   <!-- Estilos CSS -->
   <link rel="stylesheet" href="assets/menu-mobile-css/style.css">
-  <link rel="stylesheet" href="css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <!-- Ícones -->
   <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
   <!-- Ícones -->

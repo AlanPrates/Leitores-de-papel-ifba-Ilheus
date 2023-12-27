@@ -66,7 +66,7 @@ if ($result && $result->num_rows > 0) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
@@ -183,7 +183,19 @@ if ($result && $result->num_rows > 0) {
 
             </div>
 
+            <div class="form-group">
 
+                <label for="disponivel">Disponível:</label>
+
+                <select class="form-control" id="disponivel" name="disponivel">
+
+                    <option value="1" <?php echo ($livro['disponivel'] == 1) ? 'selected' : ''; ?>>Sim</option>
+
+                    <option value="0" <?php echo ($livro['disponivel'] == 0) ? 'selected' : ''; ?>>Não</option>
+
+                </select>
+
+            </div>
 
             <div class="form-group">
                 <label for="quantidade">Quantidade:</label>
@@ -192,7 +204,7 @@ if ($result && $result->num_rows > 0) {
             </div>
 
 
-            <button type="submit" class="btn btn-primary">Atualizar Dados</button>
+            <button type="submit" class="btn btn-primary">Atualizar</button>
 
         </form>
         <br>

@@ -191,7 +191,7 @@ if ($result_comentarios && $result_comentarios->num_rows > 0) {
 
     <script src="assets/js/script.js"></script>
 
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
     <?php
 

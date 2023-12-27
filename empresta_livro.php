@@ -22,18 +22,17 @@ if (isset($_POST['livro_id'])) {
     $data_devolucao = date('Y-m-d H:i:s', strtotime('+1 days'));
 
     // Verifica a quantidade disponível do livro
-    $query = "SELECT quantidade, titulo FROM livros WHERE id = '$livro_id'";
+    $query = "SELECT quantidade FROM livros WHERE id = '$livro_id'";
     $result = $conn->query($query);
 
     if ($result && $result->num_rows > 0) {
         $livro = $result->fetch_assoc();
         $quantidade = $livro['quantidade'];
-        $titulo = $livro['titulo']; // Novo
 
         // Verifica se há livros disponíveis para empréstimo
         if ($quantidade > 0) {
             // Insere o livro emprestado no banco de dados com as datas de empréstimo e devolução
-            $query = "INSERT INTO livros_emprestados (livro_id, user_id, data_emprestimo, data_devolucao, titulo) VALUES ('$livro_id', '$user_id', '$data_emprestimo', '$data_devolucao', '$titulo')";
+            $query = "INSERT INTO livros_emprestados (livro_id, user_id, data_emprestimo, data_devolucao) VALUES ('$livro_id', '$user_id', '$data_emprestimo', '$data_devolucao')";
             $result = $conn->query($query);
 
             if ($result) {

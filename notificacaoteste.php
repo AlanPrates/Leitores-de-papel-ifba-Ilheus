@@ -1,8 +1,7 @@
 <?php
 session_start();
-ob_start();
-include_once 'conexao.php';
 
+include_once 'conexao.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -28,14 +27,13 @@ function enviarNotificacao($email, $livro, $dataVencimento)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-// Configurações do e-mail
-$mail->setFrom('nzgamebr@gmail.com', 'Nome do Remetente');
-$mail->addAddress($email); // Endereço do destinatário
-$mail->CharSet = 'UTF-8'; // Define o conjunto de caracteres
-$mail->isHTML(true);
-$mail->Subject = 'Notificação de Vencimento de Entrega de Livro';
-$mail->Body    = 'Olá, <strong>' . $email . '</strong>. Este é um lembrete de que o livro <strong>' . $livro . '</strong> deve ser devolvido até ' . $dataVencimento . '.';
-
+        // Configurações do e-mail
+        $mail->setFrom('nzgamebr@gmail.com', 'Nome do Remetente');
+        $mail->addAddress($email); // Endereço do destinatário
+        $mail->CharSet = 'UTF-8'; // Define o conjunto de caracteres
+        $mail->isHTML(true);
+        $mail->Subject = 'Notificação de Vencimento de Entrega de Livro';
+        $mail->Body    = 'Olá, <strong>' . $email . '</strong>. Este é um lembrete de que o livro <strong>' . $livro . '</strong> deve ser devolvido até ' . $dataVencimento . '.';
 
         // Envia o e-mail
         if ($mail->send()) {
@@ -50,24 +48,13 @@ $mail->Body    = 'Olá, <strong>' . $email . '</strong>. Este é um lembrete de 
     }
 }
 
-// Consulta para obter empréstimos com data de entrega vencida
-$sql = "SELECT u.email, l.titulo, le.data_devolucao
-        FROM livros_emprestados le
-        INNER JOIN usuarios u ON u.id = le.user_id
-        INNER JOIN livros l ON l.id = le.livro_id
-        WHERE le.data_devolucao < NOW()";
+// Exemplo de uso da função
+$email = 'alan_nz@live.com';
+$livro = 'Título do Livro';
+$dataVencimento = '31/08/2023';
 
-$result = $conn->query($sql);
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $email = $row['email'];
-        $livro = $row['titulo'];
-        $dataVencimento = $row['data_devolucao'];
-
-        // Envia a notificação por e-mail
-        enviarNotificacao($email, $livro, $dataVencimento);
-    }
+if (enviarNotificacao($email, $livro, $dataVencimento)) {
+    echo 'E-mail enviado com sucesso!';
+} else {
+    echo 'Falha ao enviar o e-mail.';
 }
-
-$conn->close();
