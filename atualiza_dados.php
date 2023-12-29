@@ -89,7 +89,10 @@ $conn->close();
     <header>
         <nav class="nav-bar">
             <div class="logo">
-                <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                <a href="aluno.php">
+                    <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png"
+                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                </a>
             </div>
             <div class="nav-list">
                 <ul>
@@ -112,7 +115,7 @@ $conn->close();
     <div class="container">
         <?php
         if (isset($_POST['password'])) {
-            
+
             // Verifica se houve uma mensagem de sucesso
             if (isset($success_message)) {
                 echo '<div class="alert alert-success">' . $success_message . '</div>';
@@ -122,7 +125,9 @@ $conn->close();
 
         <br>
         <h2 class="text-black">Atualizar meus dados</h2>
-        <h2><span style="color: red;"><?php echo $username; ?></span></h2>
+        <h2><span style="color: red;">
+                <?php echo $username; ?>
+            </span></h2>
 
         <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
             <div class="form-group">
@@ -133,7 +138,8 @@ $conn->close();
 
             <div class="form-group">
                 <label for="email">E-mail:</label>
-                <input type="email" class="form-control" name="email" value="<?php echo isset($emailValue) ? $emailValue : ''; ?>" required>
+                <input type="email" class="form-control" name="email"
+                    value="<?php echo isset($emailValue) ? $emailValue : ''; ?>" required>
             </div>
 
             <div class="form-group">
@@ -147,7 +153,8 @@ $conn->close();
 
             <div class="form-group">
                 <label for="matricula">Matrícula:</label>
-                <input type="text" class="form-control" name="matricula" value="<?php echo isset($matriculaValue) ? $matriculaValue : ''; ?>" required>
+                <input type="text" class="form-control" name="matricula"
+                    value="<?php echo isset($matriculaValue) ? $matriculaValue : ''; ?>" required>
             </div>
 
             <div class="form-group">
@@ -155,24 +162,26 @@ $conn->close();
                 <select class="form-control" name="sexo" required>
                     <option value="Masculino" <?php echo isset($sexoValue) && $sexoValue == 'Masculino' ? 'selected' : ''; ?>>Masculino</option>
                     <option value="Feminino" <?php echo isset($sexoValue) && $sexoValue == 'Feminino' ? 'selected' : ''; ?>>Feminino</option>
-                    <option value="Outro" <?php echo isset($sexoValue) && $sexoValue == 'Outro' ? 'selected' : ''; ?>>Outro</option>
+                    <option value="Outro" <?php echo isset($sexoValue) && $sexoValue == 'Outro' ? 'selected' : ''; ?>>
+                        Outro</option>
                 </select>
             </div>
 
             <div class="form-group">
                 <label for="telefone">Telefone:</label>
-                <input type="text" class="form-control" name="telefone" value="<?php echo isset($telefoneValue) ? $telefoneValue : ''; ?>" required>
+                <input type="text" class="form-control" name="telefone"
+                    value="<?php echo isset($telefoneValue) ? $telefoneValue : ''; ?>" required>
             </div>
 
             <div class="btn-group-vertical">
                 <button type="submit" class="btn btn-danger">Atualizar Dados</button>
                 <br>
-                <a href="minhas_leituras.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
+                <a href="aluno.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
             </div>
         </form>
     </div>
     <script src="assets/js/script.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <?php
     // Inclui o rodapé
     include 'rodape.php';

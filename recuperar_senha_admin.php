@@ -29,7 +29,10 @@ $mail = new PHPMailer(true);
         <!-- Barra de navegação -->
         <nav class="nav-bar">
             <div class="logo">
-                <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                <a href="admin.php">
+                    <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png"
+                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                </a>
             </div>
             <div class="nav-list">
                 <ul>
@@ -69,7 +72,7 @@ $mail = new PHPMailer(true);
             $row_email = $result_email->fetch_assoc();
             $chave_recuperar_senha = $row_email['id'];
             //echo "Chave $chave_recuperar_senha <br>";
-
+    
             $query_up_email = "UPDATE admin 
                         SET recuperar_senha = ? 
                         WHERE id = ? 
@@ -85,19 +88,19 @@ $mail = new PHPMailer(true);
                     $mail->SMTPDebug = SMTP::DEBUG_SERVER;
                     $mail->CharSet = 'UTF-8';
                     $mail->isSMTP();
-                    $mail->Host       = 'sandbox.smtp.mailtrap.io';
-                    $mail->SMTPAuth   = true;
-                    $mail->Username   = '89f6fb8d8f567c';
-                    $mail->Password   = '2174786544ed23';
+                    $mail->Host = 'sandbox.smtp.mailtrap.io';
+                    $mail->SMTPAuth = true;
+                    $mail->Username = '89f6fb8d8f567c';
+                    $mail->Password = '2174786544ed23';
                     $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port       = 2525;
+                    $mail->Port = 2525;
 
                     $mail->setFrom('atendimento@celke.com', 'Atendimento');
                     $mail->addAddress($row_email['email'], $row_email['nome']);
 
                     $mail->isHTML(true);                                  //Set email format to HTML
                     $mail->Subject = 'Recuperar senha';
-                    $mail->Body    = 'Prezado(a) ' . $row_email['nome'] . ".<br><br>Você solicitou alteração de senha.<br><br>Para continuar o processo de recuperação de sua senha, clique no link abaixo ou cole o endereço no seu navegador: <br><br><a href='" . $link . "'>" . $link . "</a><br><br>Se você não solicitou essa alteração, nenhuma ação é necessária. Sua senha permanecerá a mesma até que você ative este código.<br><br>";
+                    $mail->Body = 'Prezado(a) ' . $row_email['nome'] . ".<br><br>Você solicitou alteração de senha.<br><br>Para continuar o processo de recuperação de sua senha, clique no link abaixo ou cole o endereço no seu navegador: <br><br><a href='" . $link . "'>" . $link . "</a><br><br>Se você não solicitou essa alteração, nenhuma ação é necessária. Sua senha permanecerá a mesma até que você ative este código.<br><br>";
                     $mail->AltBody = 'Prezado(a) ' . $row_email['nome'] . "\n\nVocê solicitou alteração de senha.\n\nPara continuar o processo de recuperação de sua senha, clique no link abaixo ou cole o endereço no seu navegador: \n\n" . $link . "\n\nSe você não solicitou essa alteração, nenhuma ação é necessária. Sua senha permanecerá a mesma até que você ative este código.\n\n";
 
                     $mail->send();
@@ -110,7 +113,7 @@ $mail = new PHPMailer(true);
                     echo "Erro: E-mail não pôde ser enviado. Erro do Mailer: {$mail->ErrorInfo}";
                 }
             } else {
-                echo  "<p style='color: #ff0000'>Erro: Tente novamente!</p>";
+                echo "<p style='color: #ff0000'>Erro: Tente novamente!</p>";
             }
         } else {
             echo "<p style='color: #ff0000'>Erro: Usuário não encontrado!</p>";
@@ -133,7 +136,8 @@ $mail = new PHPMailer(true);
 
         <div class="form-group">
             <label for="email">E-mail</label>
-            <input type="text" name="email" id="email" class="form-control" placeholder="Digite o E-Mail" value="<?php echo $email; ?>">
+            <input type="text" name="email" id="email" class="form-control" placeholder="Digite o E-Mail"
+                value="<?php echo $email; ?>">
         </div>
 
         <input type="submit" value="Recuperar" name="SendRecupSenha" class="btn btn-primary">

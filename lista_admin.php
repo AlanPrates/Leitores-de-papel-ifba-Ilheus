@@ -29,7 +29,10 @@ $username = $_SESSION['admin_username'];
     <header>
         <nav class="nav-bar">
             <div class="logo">
-                <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                <a href="admin.php">
+                    <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png"
+                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                </a>
             </div>
             <div class="nav-list">
                 <ul>

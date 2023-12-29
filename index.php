@@ -3,19 +3,6 @@ session_start();
 global $conn;
 include 'conexao.php';
 ob_start();
-
-// Verificar se o usuário ou administrador já está logado
-if (isset($_SESSION['is_admin'])) {
-  // Se o usuário for um administrador, redirecionar para a página admin.php
-  if ($_SESSION['is_admin']) {
-    header("Location: admin.php");
-  } else {
-    // Caso contrário, redirecionar para a página minhas_leituras.php
-    header("Location: minhas_leituras.php");
-  }
-  exit;
-}
-
 // Inicializar a variável de erro
 $error = "";
 
@@ -105,8 +92,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Barra de navegação -->
         <nav class="nav-bar">
           <div class="logo">
-            <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+            <a href="index.php">
+              <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente"
+                alt="LOGO ALAN" />
+            </a>
           </div>
+
           <div class="nav-list">
             <ul>
               <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
@@ -129,19 +120,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       <div class="shadow p-4">
         <h1 class="text-center mb-4">Página de Login</h1>
         <?php
-if (isset($_GET['success_message']) && $_GET['success_message'] !== "") {
-  echo '<div class="alert alert-success mt-3 text-center" role="alert">';
-  echo $_GET['success_message'];
-  echo '</div>';
-}
-?>
+        if (isset($_GET['success_message']) && $_GET['success_message'] !== "") {
+          echo '<div class="alert alert-success mt-3 text-center" role="alert">';
+          echo $_GET['success_message'];
+          echo '</div>';
+        }
+        ?>
 
-          <!-- Exibir a mensagem de erro aqui -->
-          <?php if (isset($_GET['error']) && $_GET['error'] !== "") { ?>
-              <div class="alert alert-danger mt-3 text-center" role="alert">
-                  <?php echo $_GET['error']; ?>
-              </div>
-          <?php } ?>
+        <!-- Exibir a mensagem de erro aqui -->
+        <?php if (isset($_GET['error']) && $_GET['error'] !== "") { ?>
+          <div class="alert alert-danger mt-3 text-center" role="alert">
+            <?php echo $_GET['error']; ?>
+          </div>
+        <?php } ?>
         <form action="login.php" method="POST">
           <div class="form-group">
             <label for="usuario">

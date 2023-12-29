@@ -89,7 +89,7 @@ if ($result && $result->num_rows > 0) {
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
 
@@ -98,7 +98,6 @@ if ($result && $result->num_rows > 0) {
     <link rel="stylesheet" href="assets/css/rodape.css">
 
     <style>
-
         .table-responsive {
 
             overflow-x: auto;
@@ -122,7 +121,6 @@ if ($result && $result->num_rows > 0) {
             }
 
         }
-
     </style>
 
 </head>
@@ -137,8 +135,10 @@ if ($result && $result->num_rows > 0) {
 
             <div class="logo">
 
-                <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
-
+                <a href="aluno.php">
+                    <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png"
+                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                </a>
             </div>
 
             <div class="nav-list">
@@ -183,7 +183,8 @@ if ($result && $result->num_rows > 0) {
 
         <div class="alert alert-warning" role="alert">
 
-            Total de Livros Disponíveis: <?php echo $total_disponivel; ?>
+            Total de Livros Disponíveis:
+            <?php echo $total_disponivel; ?>
 
         </div>
 
@@ -197,7 +198,8 @@ if ($result && $result->num_rows > 0) {
 
                     <label for="titulo">Título:</label>
 
-                    <input type="text" class="form-control" id="titulo" name="titulo" placeholder="Digite o título do livro" value="<?php echo $filtroTitulo; ?>">
+                    <input type="text" class="form-control" id="titulo" name="titulo"
+                        placeholder="Digite o título do livro" value="<?php echo $filtroTitulo; ?>">
 
                 </div>
 
@@ -205,7 +207,8 @@ if ($result && $result->num_rows > 0) {
 
                     <label for="autor">Autor:</label>
 
-                    <input type="text" class="form-control" id="autor" name="autor" placeholder="Digite o nome do autor" value="<?php echo $filtroAutor; ?>">
+                    <input type="text" class="form-control" id="autor" name="autor" placeholder="Digite o nome do autor"
+                        value="<?php echo $filtroAutor; ?>">
 
                 </div>
 
@@ -213,7 +216,8 @@ if ($result && $result->num_rows > 0) {
 
                     <label for="ano">Ano:</label>
 
-                    <input type="text" class="form-control" id="ano" name="ano" placeholder="Digite o ano de publicação" value="<?php echo $filtroAno; ?>">
+                    <input type="text" class="form-control" id="ano" name="ano" placeholder="Digite o ano de publicação"
+                        value="<?php echo $filtroAno; ?>">
 
                 </div>
 
@@ -261,7 +265,7 @@ if ($result && $result->num_rows > 0) {
 
             </div>
 
-            <a href="minhas_leituras.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
+            <a href="aluno.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
 
             <br>
 
@@ -274,59 +278,73 @@ if ($result && $result->num_rows > 0) {
         </div>
 
 
- <!-- Adiciona a tabela com os livros paginados -->
-<?php if (!empty($livros_paginados)) { ?>
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>Título</th>
-                    <th>Autor</th>
-                    <th>Ano de Publicação</th>
-                    <th>ISBN</th>
-                    <th>Genero</th>
-                    <th>Quantidade</th>
-                    <th>Disponível</th>
-                    <th>Ação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($livros_paginados as $livro) { 
-                    $quantidade = $livro['quantidade']; // Obtém a quantidade do livro
-                    $disponivel = ($quantidade > 0) ? 'Sim' : 'Não'; // Verifica se o livro está disponível
-                ?>
-                    <tr>
-                        <td><?php echo $livro['titulo']; ?></td>
-                        <td><?php echo $livro['autor']; ?></td>
-                        <td><?php echo $livro['ano_publicacao']; ?></td>
-                        <td><?php echo $livro['isbn']; ?></td>
-                        <td><?php echo $livro['genero']; ?></td>
-                        <td><?php echo $quantidade; ?></td>
-                        <td><?php echo $disponivel; ?></td>
-                        <td>
-                            <?php if ($disponivel == 'Sim') { ?>
-                                <form method="POST" action="empresta_livro.php" style="display: inline;">
-                                    <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
-                                    <input type="submit" class="btn btn-danger" value="Emprestar">
-                                </form>
-                            <?php } else { ?>
-                                Livro indisponível
-                            <?php } ?>
-                            <br>
-                            <br>
-                            <form method="POST" action="devolve_livro.php" style="display: inline;">
-                                <input type="hidden" name="livro_devolvido" value="<?php echo $livro['id']; ?>">
-                                <input type="submit" class="btn btn-warning" value="Devolver   ">
-                            </form>
-                        </td>
-                    </tr>
-                <?php } ?>
-            </tbody>
-        </table>
-    </div>
-<?php } else { ?>
-    <p>Nenhum livro encontrado com os critérios de busca.</p>
-<?php } ?>
+        <!-- Adiciona a tabela com os livros paginados -->
+        <?php if (!empty($livros_paginados)) { ?>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Título</th>
+                            <th>Autor</th>
+                            <th>Ano de Publicação</th>
+                            <th>ISBN</th>
+                            <th>Genero</th>
+                            <th>Quantidade</th>
+                            <th>Disponível</th>
+                            <th>Ação</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($livros_paginados as $livro) {
+                            $quantidade = $livro['quantidade']; // Obtém a quantidade do livro
+                            $disponivel = ($quantidade > 0) ? 'Sim' : 'Não'; // Verifica se o livro está disponível
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo $livro['titulo']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $livro['autor']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $livro['ano_publicacao']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $livro['isbn']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $livro['genero']; ?>
+                                </td>
+                                <td>
+                                    <?php echo $quantidade; ?>
+                                </td>
+                                <td>
+                                    <?php echo $disponivel; ?>
+                                </td>
+                                <td>
+                                    <?php if ($disponivel == 'Sim') { ?>
+                                        <form method="POST" action="empresta_livro.php" style="display: inline;">
+                                            <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
+                                            <input type="submit" class="btn btn-danger" value="Emprestar">
+                                        </form>
+                                    <?php } else { ?>
+                                        Livro indisponível
+                                    <?php } ?>
+                                    <br>
+                                    <br>
+                                    <form method="POST" action="devolve_livro.php" style="display: inline;">
+                                        <input type="hidden" name="livro_devolvido" value="<?php echo $livro['id']; ?>">
+                                        <input type="submit" class="btn btn-warning" value="Devolver   ">
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php } ?>
+                    </tbody>
+                </table>
+            </div>
+        <?php } else { ?>
+            <p>Nenhum livro encontrado com os critérios de busca.</p>
+        <?php } ?>
 
 
         <!-- Adicione a mensagem de aviso aqui -->
@@ -337,17 +355,19 @@ if ($result && $result->num_rows > 0) {
 
         </div>
         <br>
-        <?php if ($num_paginas > 1): ?>
-    <nav aria-label="Navegação de página">
-        <ul class="pagination">
-            <?php for ($i = 1; $i <= $num_paginas; $i++): ?>
-                <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
-                    <a class="page-link" href="lista_livros.php?pagina=<?php echo $i; ?>"><?php echo $i; ?></a>
-                </li>
-            <?php endfor; ?>
-        </ul>
-    </nav>
-<?php endif; ?>
+        <?php if (isset($num_paginas) && $num_paginas > 1): ?>
+            <nav aria-label="Navegação de página">
+                <ul class="pagination">
+                    <?php for ($i = 1; $i <= $num_paginas; $i++): ?>
+                        <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
+                            <a class="page-link" href="lista_livros.php?pagina=<?php echo $i; ?>">
+                                <?php echo $i; ?>
+                            </a>
+                        </li>
+                    <?php endfor; ?>
+                </ul>
+            </nav>
+        <?php endif; ?>
 
     </div>
 
@@ -356,7 +376,7 @@ if ($result && $result->num_rows > 0) {
     <?php
 
     // Inclui o rodapé
-
+    
     include 'rodape.php';
 
     ?>

@@ -58,7 +58,10 @@ if ($result_comentarios && $result_comentarios->num_rows > 0) {
 
             <div class="logo">
 
-                <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                <a href="aluno.php">
+                    <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png"
+                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+                </a>
 
             </div>
 
@@ -126,28 +129,36 @@ if ($result_comentarios && $result_comentarios->num_rows > 0) {
 
                     <?php
 
-// Consulta todos os comentários
-$query_comentarios = "SELECT c.id, l.titulo, u.username, c.comentario
+                    // Consulta todos os comentários
+                    $query_comentarios = "SELECT c.id, l.titulo, u.username, c.comentario
                       FROM comentarios c
                       LEFT JOIN livros l ON c.livro_id = l.id
                       LEFT JOIN usuarios u ON c.user_id = u.id";
 
-$result_comentarios = $conn->query($query_comentarios);
+                    $result_comentarios = $conn->query($query_comentarios);
 
-if ($result_comentarios && $result_comentarios->num_rows > 0) {
-    while ($row_comentario = $result_comentarios->fetch_assoc()) {
+                    if ($result_comentarios && $result_comentarios->num_rows > 0) {
+                        while ($row_comentario = $result_comentarios->fetch_assoc()) {
 
-                    ?>
+                            ?>
 
                             <tr>
 
-                                <td><?php echo $row_comentario['id']; ?></td>
+                                <td>
+                                    <?php echo $row_comentario['id']; ?>
+                                </td>
 
-                                <td><?php echo $row_comentario['titulo']; ?></td>
+                                <td>
+                                    <?php echo $row_comentario['titulo']; ?>
+                                </td>
 
-                                <td><?php echo $row_comentario['username']; ?></td>
+                                <td>
+                                    <?php echo $row_comentario['username']; ?>
+                                </td>
 
-                                <td><?php echo $row_comentario['comentario']; ?></td>
+                                <td>
+                                    <?php echo $row_comentario['comentario']; ?>
+                                </td>
 
                             </tr>
 
@@ -177,7 +188,8 @@ if ($result_comentarios && $result_comentarios->num_rows > 0) {
 
         </div>
 
-        <div class="btn-group-vertical mt-3"> <!-- Adicione a classe 'btn-group-vertical' para ajustar os botões em coluna -->
+        <div class="btn-group-vertical mt-3">
+            <!-- Adicione a classe 'btn-group-vertical' para ajustar os botões em coluna -->
 
             <a href="admin.php" class="btn btn-warning">Voltar para Painel de Usuário</a>
 
@@ -191,12 +203,13 @@ if ($result_comentarios && $result_comentarios->num_rows > 0) {
 
     <script src="assets/js/script.js"></script>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 
     <?php
 
     // Inclui o rodapé
-
+    
     include 'rodape.php';
 
     ?>
+

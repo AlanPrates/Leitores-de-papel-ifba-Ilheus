@@ -2,6 +2,7 @@
 session_start();
 global $conn;
 include 'conexao.php';
+
 // Inicializar a variável de erro
 $error = "";
 
@@ -11,15 +12,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Escapar os valores de entrada para evitar ataques de SQL Injection
-    $username = $conn->real_escape_string($_POST['username']);
-
     // Consultar o banco de dados para verificar o usuário e a senha nas duas tabelas
-    $query_usuarios = "SELECT id, nome, password, is_admin FROM usuarios WHERE username='$username'";
-    $query_admin = "SELECT id, nome, password FROM admin WHERE admin_username='$username'";
+    $query_usuarios = "SELECT id, nome, password, is_admin FROM usuarios WHERE username=?";
+    $query_admin = "SELECT id, nome, password FROM admin WHERE admin_username=?";
 
-    $result_usuarios = $conn->query($query_usuarios);
-    $result_admin = $conn->query($query_admin);
+    // Usar declarações preparadas para evitar SQL Injection
+    if ($stmt = $conn->prepare($query_usuarios)) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result_usuarios = $stmt->get_result();
+        $stmt->close();
+    }
+
+    if ($stmt = $conn->prepare($query_admin)) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $result_admin = $stmt->get_result();
+        $stmt->close();
+    }
 
     // Verificar se o usuário foi encontrado nas tabelas de usuários ou admin
     if (($result_usuarios && $result_usuarios->num_rows == 1) || ($result_admin && $result_admin->num_rows == 1)) {
@@ -55,15 +65,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             // Autenticação falhou, definir a mensagem de erro
             $error = "Nome de usuário ou senha incorretos";
             // Redirecionar de volta para index.php com mensagem de erro
-            header("Location: index.php?error=".urlencode($error));
+            header("Location: index.php?error=" . urlencode($error));
             exit;
         }
     } else {
         // Autenticação falhou, definir a mensagem de erro
         $error = "Nome de usuário ou senha incorretos";
         // Redirecionar de volta para index.php com mensagem de erro
-        header("Location: index.php?error=".urlencode($error));
+        header("Location: index.php?error=" . urlencode($error));
         exit;
     }
 }
 ?>
+

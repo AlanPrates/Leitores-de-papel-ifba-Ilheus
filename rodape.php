@@ -1,10 +1,20 @@
 <!DOCTYPE html>
+
 <html lang="pt-BR">
 
+
+
 <head>
+
     <meta charset="UTF-8">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <!-- elementos head... -->
+    <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
+
+
     <style>
         body {
             margin: 0;
@@ -13,9 +23,7 @@
 
         .content {
             min-height: calc(50vh - 50px);
-            /* Altura total da janela menos a altura do rodapé */
             padding-bottom: 100px;
-            /* Altura do rodapé */
         }
 
         .footer {
@@ -23,24 +31,45 @@
             bottom: 0;
             width: 100%;
             height: 100px;
-            /* Altura do rodapé #dc3545 */
             background-color: #eab676;
             color: #fff;
             padding: 20px;
             text-align: center;
-            /* Centraliza o texto */
+        }
+
+        /* Adicionando estilos para a classe fab */
+        .fab {
+            font-size: 24px;
+            margin-right: 5px;
+            /* Ajuste de margem para o ícone não ficar colado ao texto */
         }
     </style>
-    <title>Document</title>
+
+    <title>Rodape</title>
+
 </head>
 
+
+
 <body>
+
     <div class="content">
+
         <!-- Conteúdo da página -->
+
     </div>
-    <footer class="footer text-center"> <!-- Adiciona a classe "text-center" -->
+
+    <footer class="footer text-center">
         <p class="mb-0">Leitores de Papel &copy; 2023 - Todos os direitos reservados.</p>
+
+        <a href="https://www.instagram.com/seu_perfil_do_instagram/" target="_blank" rel="noopener noreferrer">
+            <i class="fab fa-instagram"></i> Siga-nos no Instagram
+        </a>
     </footer>
+
+
 </body>
+
+
 
 </html>

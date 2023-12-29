@@ -1,30 +1,34 @@
 <?php
+
 session_start();
+
 global $conn;
+
 include 'conexao.php';
 
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    if (isset($_POST['livro_id']) && isset($_POST['comentario']) && isset($_SESSION['user_id'])) {
-        $livro_id = $_POST['livro_id'];
-        $comentario = $_POST['comentario'];
-        $user_id = $_SESSION['user_id'];
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $livro_id = $_POST['livro_id'];
+    $comentario = $_POST['comentario'];
+    $avaliacao = $_POST['avaliacao'];
 
-        // Escapar os valores de entrada para evitar SQL Injection
-        $livro_id = $conn->real_escape_string($livro_id);
-        $comentario = $conn->real_escape_string($comentario);
-        $user_id = $conn->real_escape_string($user_id);
+    // Certifique-se de que $user_id é um valor inteiro
+    $user_id = (int) $_SESSION['user_id'];
 
-        // Consulta para inserir o comentário na tabela
-        $query = "INSERT INTO comentarios (livro_id, comentario, user_id) VALUES ('$livro_id', '$comentario', '$user_id')";
+    // Use prepared statements para evitar injeção de SQL
+    $stmt = $conn->prepare("INSERT INTO comentarios (livro_id, user_id, comentario, avaliacao) VALUES (?, ?, ?, ?)");
+    $stmt->bind_param("iiss", $livro_id, $user_id, $comentario, $avaliacao);
 
-        if ($conn->query($query)) {
-            // Comentário adicionado com sucesso
-            // Redirecionar de volta para a página devolve_livro.php
-            header("Location: devolve_livro.php");
-            exit;
-        } else {
-            // Se houver um erro ao inserir o comentário
-            echo "Erro ao adicionar o comentário: " . $conn->error;
-        }
+    if ($stmt->execute()) {
+        // Comentário adicionado com sucesso! Redireciona para devolver-livro.php
+        header("Location: devolve_livro.php");
+        exit; // Certifique-se de encerrar o script após o redirecionamento
+    } else {
+        echo "Erro ao adicionar o comentário: " . $stmt->error;
     }
+
+    $stmt->close();
+} else {
+    echo "Acesso inválido.";
 }
+?>
+

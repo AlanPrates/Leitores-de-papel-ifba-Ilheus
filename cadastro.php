@@ -88,7 +88,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
       <!-- Barra de navegação -->
       <nav class="nav-bar">
         <div class="logo">
-          <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
+          <img class="cabecalho-imagem" src="assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente"
+            alt="LOGO ALAN" />
         </div>
         <div class="nav-list">
           <ul>
@@ -136,6 +137,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 <select class="form-control" id="categoria" name="categoria" required>
                   <option value="" disabled selected>Selecione...</option>
                   <option value="aluno">Aluno</option>
+                  <option value="aluno">Bolsista</option>
                   <option value="professor">Professor</option>
                   <option value="funcionario">Funcionário</option>
                 </select>
@@ -177,11 +179,18 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
                 <div class="divCheck">
                   <div class="termos-texto p-2" style="max-height: 100px; overflow: auto;">
                     Por favor, leia e aceite os termos abaixo:
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus lacus non neque ullamcorper, nec semper quam cursus. Donec ac felis at purus tincidunt luctus. Vivamus consequat dolor sit amet rutrum ultrices. Mauris dapibus elit non risus pulvinar, sed condimentum enim hendrerit. Sed interdum orci eget semper ultrices. Suspendisse aliquam, risus sit amet porttitor tempus, justo odio congue purus, sed rhoncus orci enim non nulla. Ut sagittis ultrices tempor. Donec finibus metus sit amet tortor efficitur dignissim. Duis vehicula, est vel gravida vulputate, augue sem pellentesque felis, sed blandit lorem ligula in mi.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi maximus lacus non neque ullamcorper,
+                    nec semper quam cursus. Donec ac felis at purus tincidunt luctus. Vivamus consequat dolor sit amet
+                    rutrum ultrices. Mauris dapibus elit non risus pulvinar, sed condimentum enim hendrerit. Sed
+                    interdum orci eget semper ultrices. Suspendisse aliquam, risus sit amet porttitor tempus, justo odio
+                    congue purus, sed rhoncus orci enim non nulla. Ut sagittis ultrices tempor. Donec finibus metus sit
+                    amet tortor efficitur dignissim. Duis vehicula, est vel gravida vulputate, augue sem pellentesque
+                    felis, sed blandit lorem ligula in mi.
                   </div>
                   <div class="form-check form-check-inline">
                     <input class="form-check-input" type="checkbox" id="aceitar-termos" required>
-                    <label class="form-check-label" for="aceitar-termos">Aceitar Termos<span class="text-danger">*</span></label>
+                    <label class="form-check-label" for="aceitar-termos">Aceitar Termos<span
+                        class="text-danger">*</span></label>
                   </div>
                 </div>
                 <br>
