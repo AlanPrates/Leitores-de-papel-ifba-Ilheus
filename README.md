@@ -1,5 +1,5 @@
 # leitores-de-papel-ifba
- Projeto em desenvolvido por Alan Prates e Daniel Monteiro
+ Projeto desenvolvido por Alan Prates e Daniel Monteiro
  
 ![Leitores de papel ifba Ilhéus - 1](https://raw.githubusercontent.com/AlanPrates/Leitores-de-papel-ifba-Ilheus/main/Print/1.png "Imagem 1")
 
