@@ -1,0 +1,3 @@
+# .htaccess limpo para evitar conflitos com redirecionamentos PHP e caminhos relativos
+# As regras anteriores estavam fazendo com que o navegador considerasse a raiz como base para arquivos em public/
+# O redirecionamento agora é gerido pelo index.php da raiz.
