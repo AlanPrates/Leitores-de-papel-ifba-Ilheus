@@ -48,10 +48,25 @@ if ($result && $result->num_rows > 0) {
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
 
     <style>
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
         .container {
-
+            flex: 1 0 auto;
             margin-top: 20px;
+            margin-bottom: 30px;
+        }
 
+        footer, .footer {
+            flex-shrink: 0;
+            margin-top: auto;
         }
     </style>
 
