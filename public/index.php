@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $password = $conn->real_escape_string($password);
 
     // Consultar o banco de dados para verificar o usuário ou administrador e a senha
-    $query_users = "SELECT id, username, password FROM usuarios WHERE username='$username'";
-    $query_admin = "SELECT id, admin_username as username, password FROM admin WHERE admin_username='$username'";
+    $query_users = "SELECT id, nome, username, password FROM usuarios WHERE username='$username'";
+    $query_admin = "SELECT id, nome, admin_username as username, password FROM admin WHERE admin_username='$username'";
 
     $result_users = $conn->query($query_users);
     $result_admin = $conn->query($query_admin);
@@ -40,6 +40,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         // Autenticação bem-sucedida, iniciar a sessão e redirecionar para a página apropriada
         $_SESSION['username'] = $row['username'];
         $_SESSION['user_id'] = $row['id'];
+        if (isset($row['nome'])) {
+          $_SESSION['nome'] = $row['nome'];
+          setcookie('nome', $row['nome'], time() + (86400 * 30), "/");
+        }
 
         // Definir o campo 'is_admin' na sessão para identificar se é um administrador
         if (isset($result_admin)) {
@@ -88,34 +92,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <body>
   <section>
-    <header>
-      <header>
-        <!-- Barra de navegação -->
-        <nav class="nav-bar">
-          <div class="logo">
-            <a href="index.php">
-              <img class="cabecalho-imagem" src="../assets/img/Fotoram.io.png"
-                title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
-            </a>
-          </div>
+    <?php include '../includes/header.php'; ?>
 
-          <div class="nav-list">
-            <ul>
-              <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
-            </ul>
-          </div>
-          <div class="mobile-menu-icon">
-            <button onclick="menuShow()"><img class="icon" src="../assets/img/menu_white_36dp.svg" alt=""></button>
-          </div>
-        </nav>
-        <div class="mobile-menu">
-          <ul>
-            <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
-
-          </ul>
-        </div>
-      </header>
-    </header>
 
     <div class="container d-flex justify-content-center align-items-center vh-100">
       <div class="shadow p-4">
@@ -170,11 +148,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
               ?>
             </div>
           </div>
-        </div>
-        <div class="alert alert-warning text-center" role="alert">
-          Usuário Admin: admin
-          <br>
-          Senha: admin
         </div>
       </div>
     </div>

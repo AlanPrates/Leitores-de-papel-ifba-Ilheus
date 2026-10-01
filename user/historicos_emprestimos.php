@@ -24,6 +24,7 @@ $result_historico = $conn->query($sql_historico);
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
     <link rel="stylesheet" href="../assets/css/rodape.css">
+    <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
     <style>
         table {
             border-collapse: collapse;
@@ -51,33 +52,7 @@ $result_historico = $conn->query($sql_historico);
 </head>
 
 <body>
-    <header>
-        <nav class="nav-bar">
-
-            <div class="logo">
-                <a href="../admin/index.php">
-                    <img class="cabecalho-imagem" src="../assets/img/Fotoram.io.png"
-                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
-                </a>
-            </div>
-            <div class="nav-list">
-                <ul>
-                    <li class="nav-item"><a href="../public/cadastro.php" class="nav-link">Criar conta de leitor</a>
-                    </li>
-                    <li class="nav-item"><a href="minhas_leituras.php" class="nav-link">Acessar minhas leituras</a></li>
-                </ul>
-            </div>
-            <div class="mobile-menu-icon">
-                <button onclick="menuShow()"><img class="icon" src="../assets/img/menu_white_36dp.svg" alt=""></button>
-            </div>
-        </nav>
-        <div class="mobile-menu">
-            <ul>
-                <li class="nav-item"><a href="../public/cadastro.php" class="nav-link">Criar conta de leitor</a></li>
-                <li class="nav-item"><a href="index.php" class="nav-link">Acessar Minhas Leituras</a></li>
-            </ul>
-        </div>
-    </header>
+    <?php include '../includes/header.php'; ?>
     <br>
     <h2>Históricos</h2>
     <br>
@@ -139,11 +114,8 @@ $result_historico = $conn->query($sql_historico);
         Por favor, role a página horizontalmente para visualizar a tabela completa.
     </div>
     <div class="row mb-3 mt-4">
-        <div class="col-md-6 mb-2">
+        <div class="col-md-12 mb-2">
             <a href="aluno.php" class="btn btn-warning btn-block">Voltar para Painel de Usuário</a>
-        </div>
-        <div class="col-md-6 mb-2">
-            <a href="../actions/logout.php" class="btn btn-danger btn-block">Sair</a>
         </div>
     </div>
     <br>

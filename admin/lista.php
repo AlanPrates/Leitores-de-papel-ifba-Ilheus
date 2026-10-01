@@ -21,40 +21,13 @@ $username = $_SESSION['admin_username'];
     <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
 </head>
 
 <body>
-    <header>
-        <nav class="nav-bar">
-            <div class="logo">
-                <a href="index.php">
-                    <img class="cabecalho-imagem" src="../assets/img/Fotoram.io.png"
-                        title="Sempre se atualizando constantemente" alt="LOGO ALAN" />
-                </a>
-            </div>
-            <div class="nav-list">
-                <ul>
-                    <li class="nav-item"><a href="../public/cadastro.php" class="nav-link">Criar conta de leitor</a>
-                    </li>
-                    <li class="nav-item"><a href="../user/minhas_leituras.php" class="nav-link">Acessar minhas
-                            leituras</a></li>
-                </ul>
-            </div>
-
-            <div class="mobile-menu-icon">
-                <button onclick="menuShow()"><img class="icon" src="../assets/img/menu_white_36dp.svg" alt=""></button>
-            </div>
-        </nav>
-        <div class="mobile-menu">
-            <ul>
-                <li class="nav-item"><a href="../public/cadastro.php" class="nav-link">Criar conta de leitor</a></li>
-                <li class="nav-item"><a href="../user/minhas_leituras.php" class="nav-link">Acessar minhas leituras</a>
-                </li>
-            </ul>
-        </div>
-    </header>
+    <?php include '../includes/header.php'; ?>
     <br>
     <div class="container-fluid">
         <h2 class="text-center">Lista de Administradores</h2>
@@ -103,11 +76,8 @@ $username = $_SESSION['admin_username'];
         </div>
         <br>
         <div class="row">
-            <div class="col-md-6 mb-2">
+            <div class="col-md-12 mb-2">
                 <a href="index.php" class="btn btn-warning btn-block">Voltar para Painel de Usuário</a>
-            </div>
-            <div class="col-md-6 mb-2">
-                <a href="../actions/logout.php" class="btn btn-danger btn-block">Sair</a>
             </div>
         </div>
     </div>

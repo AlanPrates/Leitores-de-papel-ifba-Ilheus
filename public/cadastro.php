@@ -85,30 +85,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 <body>
   <section>
-    <header>
-      <!-- Barra de navegação -->
-      <nav class="nav-bar">
-        <div class="logo">
-          <img class="cabecalho-imagem" src="../assets/img/Fotoram.io.png" title="Sempre se atualizando constantemente"
-            alt="LOGO ALAN" />
-        </div>
-        <div class="nav-list">
-          <ul>
-            <li class="nav-item"><a href="cadastro.php" class="nav-link">Criar conta de leitor</a></li>
-            <li class="nav-item"><a href="index.php" class="nav-link">Acessar minhas leituras</a></li>
-          </ul>
-        </div>
-        <div class="mobile-menu-icon">
-          <button onclick="menuShow()"><img class="icon" src="../assets/img/menu_white_36dp.svg" alt=""></button>
-        </div>
-      </nav>
-      <div class="mobile-menu">
-        <ul>
-          <li class="nav-item"><a href="index.php" class="nav-link">Criar conta de leitor</a></li>
-          <li class="nav-item"><a href="index.php" class="nav-link">Acessar Minhas Leituras</a></li>
-        </ul>
-      </div>
-    </header>
+    <?php include '../includes/header.php'; ?>
+
     <div class="container">
       <div class="row justify-content-center">
         <div class="col-lg-12">

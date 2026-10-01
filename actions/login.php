@@ -54,7 +54,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         // Verificar se a senha fornecida corresponde à senha armazenada
         if (password_verify($password, $storedPassword)) {
-            // Autenticação bem-sucedida, iniciar a sessão e redirecionar para a página apropriada
+            // Autenticação bem-sucedida, iniciar a sessão e definir dados do usuário
+            $_SESSION['user_id'] = $row['id'];
+            $_SESSION['nome'] = $row['nome'];
+            setcookie('nome', $row['nome'], time() + (86400 * 30), "/");
+
             if ($is_admin) {
                 $_SESSION['admin_username'] = $username;
                 header("Location: ../admin/index.php");
@@ -62,9 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $_SESSION['username'] = $username;
                 header("Location: ../user/aluno.php");
             }
-            $_SESSION['user_id'] = $row['id'];
-            $_SESSION['nome'] = $row['nome'];
-            setcookie('nome', $row['nome']);
+            exit;
         } else {
             // Autenticação falhou, definir a mensagem de erro
             $error = "Nome de usuário ou senha incorretos";
