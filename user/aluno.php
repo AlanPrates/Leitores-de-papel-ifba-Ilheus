@@ -133,8 +133,8 @@ if (!isset($_SESSION['admin_username']) && !isset($_SESSION['username'])) {
                         $saudacao = "Boa noite";
                     }
 
-                    // Exibe a saudação juntamente com o nome do usuário
-                    echo "<span class='text-danger'><h1>Olá, $nomeUsuario! $saudacao.</h1></span>";
+                    // Exibe a saudação juntamente com o nome do usuário sanitizado
+                    echo "<span class='text-danger'><h1>Olá, " . htmlspecialchars($nomeUsuario) . "! $saudacao.</h1></span>";
                 } else {
                     echo "<span class='text-danger'>Bem-vindo à página inicial.</span>";
                 }

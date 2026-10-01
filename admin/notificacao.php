@@ -1,65 +1,34 @@
 <?php
-
 session_start();
+include_once '../includes/auth.php';
+require_admin();
 
-
-
-include_once 'conexao.php';
-
-
+include_once '../config/database.php';
+include_once '../includes/mail_config.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
-
 use PHPMailer\PHPMailer\SMTP;
-
 use PHPMailer\PHPMailer\Exception;
 
-
-
-// Inclua o arquivo do PHPMailer
-
-require './lib/vendor/phpmailer/phpmailer/src/Exception.php';
-
-require './lib/vendor/phpmailer/phpmailer/src/PHPMailer.php';
-
-require './lib/vendor/phpmailer/phpmailer/src/SMTP.php';
-
-
+require_once '../lib/vendor/autoload.php';
 
 // Função para enviar e-mails de notificação
-
 function enviarNotificacao($email, $livro, $dataDevolucao)
 {
-
-    // Instância do PHPMailer
-
+    $smtp = get_smtp_config();
     $mail = new PHPMailer(true);
 
-
-
     try {
-
-        // Configurações do servidor SMTP (substitua pelas suas configurações)
-
         $mail->isSMTP();
-
-        $mail->Host = 'smtp-relay.brevo.com';
-
-        $mail->SMTPAuth = true;
-
-        $mail->Username = 'nzgamebr@gmail.com';
-
-        $mail->Password = '0LQ98cwOraSE7RX2';
-
+        $mail->Host = $smtp['host'];
+        $mail->SMTPAuth = !empty($smtp['username']);
+        $mail->Username = $smtp['username'];
+        $mail->Password = $smtp['password'];
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = $smtp['port'];
 
-        $mail->Port = 587;
+        $mail->setFrom($smtp['from_email'], $smtp['from_name']);
 
-
-
-        // Configurações do e-mail
-
-        $mail->setFrom('nzgamebr@gmail.com', 'Nome do Remetente');
 
         $mail->addAddress($email);
 
@@ -99,17 +68,9 @@ function enviarNotificacao($email, $livro, $dataDevolucao)
 
 
 
-// Consulta ao banco de dados para obter os dados de notificação
+// $conn já foi inicializado por config/database.php
+global $conn;
 
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-
-
-if ($conn->connect_error) {
-
-    die("Conexão falhou: " . $conn->connect_error);
-
-}
 
 
 

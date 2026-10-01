@@ -63,19 +63,21 @@ $mail = new PHPMailer(true);
                         $link = "https://alanprates.com.br/leitores-de-papel-ifba/user/atualizar_senha.php?chave=$chave_recuperar_senha";
 
                         try {
-                            /*$mail->SMTPDebug = SMTP::DEBUG_SERVER;*/
-                            $mail->SMTPDebug = SMTP::DEBUG_SERVER;
+                            include_once '../includes/mail_config.php';
+                            $smtp = get_smtp_config();
+
                             $mail->CharSet = 'UTF-8';
                             $mail->isSMTP();
-                            $mail->Host = 'sandbox.smtp.mailtrap.io';
-                            $mail->SMTPAuth = true;
-                            $mail->Username = '89f6fb8d8f567c';
-                            $mail->Password = '2174786544ed23';
+                            $mail->Host = $smtp['host'];
+                            $mail->SMTPAuth = !empty($smtp['username']);
+                            $mail->Username = $smtp['username'];
+                            $mail->Password = $smtp['password'];
                             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                            $mail->Port = 2525;
+                            $mail->Port = $smtp['port'];
 
-                            $mail->setFrom('atendimento@celke.com', 'Atendimento');
+                            $mail->setFrom($smtp['from_email'], $smtp['from_name']);
                             $mail->addAddress($row_email['email'], $row_email['nome']);
+
 
                             $mail->isHTML(true);                                  //Set email format to HTML
                             $mail->Subject = 'Recuperar senha';

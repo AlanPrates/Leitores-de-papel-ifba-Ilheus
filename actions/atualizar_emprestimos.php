@@ -1,84 +1,51 @@
 <?php
-
 session_start();
 
-include '../config/database.php';
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-// Verifica se o usuário não está logado
+// Apenas usuários autenticados podem sincronizar seus próprios empréstimos
+require_login('../public/index.php');
 
-if (!isset($_SESSION['user_id'])) {
-
+$current_user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+if ($current_user_id <= 0) {
     exit;
-
 }
 
+// Busca registros do usuário logado que ainda não estão no seu histórico
+$stmt = $conn->prepare("SELECT livro_id, data_emprestimo, data_devolucao 
+                        FROM livros_emprestados 
+                        WHERE user_id = ? 
+                          AND livro_id NOT IN (
+                              SELECT livro_id FROM historico_emprestimos WHERE user_id = ?
+                          )");
 
-
-// Busca os registros na tabela livros_emprestados que não estão na tabela historico_emprestimos
-
-$sql = "SELECT * FROM livros_emprestados WHERE livro_id NOT IN (SELECT livro_id FROM historico_emprestimos)";
-
-$result = $conn->query($sql);
-
-
-
-// Verifica se ocorreu um erro na consulta SQL
-
-if (!$result) {
-
-    die("Erro na consulta SQL: " . $conn->error);
-
+if (!$stmt) {
+    exit;
 }
 
+$stmt->bind_param("ii", $current_user_id, $current_user_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
-
-// Verifica se existem registros para serem transferidos
-
-if ($result->num_rows > 0) {
-
+if ($result && $result->num_rows > 0) {
+    $insert_stmt = $conn->prepare("INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)");
+    
     while ($row = $result->fetch_assoc()) {
+        $livro_id = (int)$row["livro_id"];
+        $data_emprestimo = $row["data_emprestimo"];
+        $data_devolucao = $row["data_devolucao"];
 
-        $livro_id = $row["livro_id"];
-
-
-
-        // Verifica se o livro já possui um registro no histórico
-
-        $check_sql = "SELECT * FROM historico_emprestimos WHERE livro_id = '$livro_id'";
-
-        $check_result = $conn->query($check_sql);
-
-
-
-        // Insere os dados na tabela historico_emprestimos apenas se não houver registro para o livro
-
-        if ($check_result->num_rows === 0) {
-
-            $user_id = $row["user_id"];
-
-            $data_emprestimo = $row["data_emprestimo"];
-
-            $data_devolucao = $row["data_devolucao"];
-
-
-
-            // Insere os dados na tabela historico_emprestimos
-
-            $insert_sql = "INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao) VALUES ('$livro_id', '$user_id', '$data_emprestimo', '$data_devolucao')";
-
-            $conn->query($insert_sql);
-
+        if ($insert_stmt) {
+            $insert_stmt->bind_param("iiss", $livro_id, $current_user_id, $data_emprestimo, $data_devolucao);
+            $insert_stmt->execute();
         }
-
     }
 
+    if ($insert_stmt) {
+        $insert_stmt->close();
+    }
 }
 
-
-
-// Fecha a conexão com o banco de dados
-
+$stmt->close();
 $conn->close();
-
-?>
-

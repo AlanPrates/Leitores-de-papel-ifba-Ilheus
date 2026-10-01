@@ -1,74 +1,39 @@
 <?php
-
 session_start();
+include_once '../includes/auth.php';
+require_admin();
 
 global $conn;
-
 include '../config/database.php';
 
-
-
-// Verifica se o usuário não está logado
-
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
-}
-
-
-
 // Consulta SQL para obter o total de quantidade de livros disponíveis
-
 $query_total_disponivel = "SELECT SUM(quantidade) AS total_disponivel FROM livros";
-
 $result_total_disponivel = $conn->query($query_total_disponivel);
+$row_total_disponivel = $result_total_disponivel ? $result_total_disponivel->fetch_assoc() : null;
+$total_disponivel = $row_total_disponivel ? $row_total_disponivel['total_disponivel'] : 0;
 
-$row_total_disponivel = $result_total_disponivel->fetch_assoc();
-
-$total_disponivel = $row_total_disponivel['total_disponivel'];
-
-
-
-// Definição das variáveis de filtro (mantenha essas linhas, se houver necessidade de filtrar)
-
-$filtroTitulo = isset($_GET['titulo']) ? $_GET['titulo'] : '';
-
-$filtroAutor = isset($_GET['autor']) ? $_GET['autor'] : '';
-
-$filtroAno = isset($_GET['ano']) ? $_GET['ano'] : '';
-
+// Definição das variáveis de filtro com escape
+$filtroTitulo = isset($_GET['titulo']) ? trim($_GET['titulo']) : '';
+$filtroAutor = isset($_GET['autor']) ? trim($_GET['autor']) : '';
+$filtroAno = isset($_GET['ano']) ? trim($_GET['ano']) : '';
 $filtroDisponibilidade = isset($_GET['disponibilidade']) ? $_GET['disponibilidade'] : '';
-
 $filtroOrdem = isset($_GET['ordem']) ? $_GET['ordem'] : '';
 
-$query = "SELECT *, quantidade - quantidade_emprestada AS quantidade_disponivel FROM livros WHERE 1=1";
-
-
-
-// Construção da consulta SQL com os filtros
-
+// Construção da consulta SQL com filtros sanitizados
 $query = "SELECT * FROM livros WHERE 1=1";
-
 if (!empty($filtroTitulo)) {
-
-    $query .= " AND titulo LIKE '%$filtroTitulo%'";
-
+    $eTitulo = $conn->real_escape_string($filtroTitulo);
+    $query .= " AND titulo LIKE '%$eTitulo%'";
 }
-
 if (!empty($filtroAutor)) {
-
-    $query .= " AND autor LIKE '%$filtroAutor%'";
-
+    $eAutor = $conn->real_escape_string($filtroAutor);
+    $query .= " AND autor LIKE '%$eAutor%'";
 }
-
 if (!empty($filtroAno)) {
-
-    $query .= " AND ano_publicacao = $filtroAno";
-
+    $eAno = (int)$filtroAno;
+    $query .= " AND ano_publicacao = $eAno";
 }
+
 
 if ($filtroDisponibilidade == 'disponivel') {
 
@@ -249,7 +214,7 @@ if ($result && $result->num_rows > 0) {
                     <label for="titulo">Título:</label>
 
                     <input type="text" class="form-control" id="titulo" name="titulo"
-                        placeholder="Digite o título do livro" value="<?php echo $filtroTitulo; ?>">
+                        placeholder="Digite o título do livro" value="<?php echo htmlspecialchars($filtroTitulo, ENT_QUOTES, 'UTF-8'); ?>">
 
                 </div>
 
@@ -258,7 +223,7 @@ if ($result && $result->num_rows > 0) {
                     <label for="autor">Autor:</label>
 
                     <input type="text" class="form-control" id="autor" name="autor" placeholder="Digite o nome do autor"
-                        value="<?php echo $filtroAutor; ?>">
+                        value="<?php echo htmlspecialchars($filtroAutor, ENT_QUOTES, 'UTF-8'); ?>">
 
                 </div>
 
@@ -267,7 +232,8 @@ if ($result && $result->num_rows > 0) {
                     <label for="ano">Ano:</label>
 
                     <input type="text" class="form-control" id="ano" name="ano" placeholder="Digite o ano de publicação"
-                        value="<?php echo $filtroAno; ?>">
+                        value="<?php echo htmlspecialchars($filtroAno, ENT_QUOTES, 'UTF-8'); ?>">
+
 
                 </div>
 

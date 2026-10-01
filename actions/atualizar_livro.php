@@ -1,81 +1,50 @@
 <?php
-
 session_start();
 
-include '../config/database.php';
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-
-
-// Verifica se o usuário não está logado
-
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
-}
-
-
-
-// Verifica se o formulário de atualização foi enviado
+// Apenas administradores autenticados podem atualizar livros
+require_admin('../public/index.php');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id'])) {
-
-    // Obtém os valores do formulário
-
-    $livro_id = $_POST['livro_id'];
-
-    $titulo = $conn->real_escape_string($_POST['titulo']);
-
-    $autor = $conn->real_escape_string($_POST['autor']);
-
-    $ano_publicacao = $conn->real_escape_string($_POST['ano_publicacao']);
-
-    $isbn = $conn->real_escape_string($_POST['isbn']);
-
-    $genero = $conn->real_escape_string($_POST['genero']);
-
-    $quantidade = $conn->real_escape_string($_POST['quantidade']);
-
-    // Calcula a disponibilidade baseado na quantidade
+    $livro_id = (int)$_POST['livro_id'];
+    $titulo = isset($_POST['titulo']) ? trim($_POST['titulo']) : '';
+    $autor = isset($_POST['autor']) ? trim($_POST['autor']) : '';
+    $ano_publicacao = isset($_POST['ano_publicacao']) ? trim($_POST['ano_publicacao']) : '';
+    $isbn = isset($_POST['isbn']) ? trim($_POST['isbn']) : '';
+    $genero = isset($_POST['genero']) ? trim($_POST['genero']) : '';
+    $quantidade = isset($_POST['quantidade']) ? (int)$_POST['quantidade'] : 0;
+    if ($quantidade < 0) {
+        $quantidade = 0;
+    }
     $disponivel = ($quantidade > 0) ? 1 : 0;
 
-
-
-    // Atualiza os dados do livro no banco de dados
-
-    $query = "UPDATE livros SET titulo='$titulo', autor='$autor', ano_publicacao='$ano_publicacao', isbn='$isbn', genero='$genero', disponivel='$disponivel', quantidade='$quantidade' WHERE id='$livro_id'";
-
-    $result = $conn->query($query);
-
-
-
-    // Verifica se a atualização foi bem-sucedida ou exibe uma mensagem de erro
-
-    if ($result) {
-
-        // Redireciona para a página de edição com mensagem de sucesso
-
-        header("Location: ../admin/lista_livros.php?livro_id=$livro_id&success=true");
-
+    if ($livro_id <= 0 || empty($titulo)) {
+        $_SESSION['error_message'] = "Dados inválidos para atualização do livro.";
+        header("Location: ../admin/lista_livros.php");
         exit;
-
-    } else {
-
-        echo "Erro ao atualizar o livro: " . $conn->error;
-
     }
 
-} else {
-
-    // Se o formulário não foi enviado, redireciona para a página de lista de livros
+    $stmt = $conn->prepare("UPDATE livros SET titulo = ?, autor = ?, ano_publicacao = ?, isbn = ?, genero = ?, disponivel = ?, quantidade = ? WHERE id = ?");
+    if ($stmt) {
+        $stmt->bind_param("sssssiii", $titulo, $autor, $ano_publicacao, $isbn, $genero, $disponivel, $quantidade, $livro_id);
+        if ($stmt->execute()) {
+            $_SESSION['success_message'] = "Livro atualizado com sucesso.";
+            header("Location: ../admin/lista_livros.php?livro_id=" . $livro_id . "&success=true");
+            $stmt->close();
+            exit;
+        } else {
+            $_SESSION['error_message'] = "Erro ao atualizar livro.";
+        }
+        $stmt->close();
+    } else {
+        $_SESSION['error_message'] = "Erro ao preparar a atualização.";
+    }
 
     header("Location: ../admin/lista_livros.php");
-
     exit;
-
+} else {
+    header("Location: ../admin/lista_livros.php");
+    exit;
 }
-
-
-

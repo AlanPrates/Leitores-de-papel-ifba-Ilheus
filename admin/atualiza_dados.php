@@ -1,24 +1,10 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
-
-
-
-// Verifica se o usuário está autenticado
-
-if (!isset($_SESSION['admin_username'])) {
-
-    // Redireciona para a página de login ou exibe uma mensagem de erro
-
-    header('Location: ../public/index.php');
-
-    exit();
-
-}
+require_admin('../public/index.php');
 
 
 
@@ -30,85 +16,51 @@ $username = $_SESSION['admin_username'];
 
 // Verifica se o formulário de atualização foi enviado
 
-if (isset($_POST['password'])) {
-
-
-
-    // Escapa os valores de entrada para evitar ataques de SQL Injection
-
-    $password = $conn->real_escape_string($_POST['password']);
-
-    $email = $conn->real_escape_string($_POST['email']);
-
-    $categoria = $conn->real_escape_string($_POST['categoria']);
-
-    $matricula = $conn->real_escape_string($_POST['matricula']);
-
-    $sexo = $conn->real_escape_string($_POST['sexo']);
-
-    $telefone = $conn->real_escape_string($_POST['telefone']);
-
-
-
-    // Cria o hash seguro da nova senha usando password_hash()
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
+    $password = $_POST['password'];
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $categoria = isset($_POST['categoria']) ? trim($_POST['categoria']) : '';
+    $matricula = isset($_POST['matricula']) ? trim($_POST['matricula']) : '';
+    $sexo = isset($_POST['sexo']) ? trim($_POST['sexo']) : '';
+    $telefone = isset($_POST['telefone']) ? trim($_POST['telefone']) : '';
 
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-
-
-    // Atualiza os dados do usuário existente, incluindo o novo hash de senha
-
-    $query = "UPDATE admin SET password='$hashedPassword', email='$email', categoria='$categoria', matricula='$matricula', sexo='$sexo', telefone='$telefone' WHERE admin_username='$username'";
-
-    $result = $conn->query($query);
-
-
-
-    if ($result) {
-
-        $success_message = "Dados do usuário atualizados com sucesso!";
-
+    $stmt_upd = $conn->prepare("UPDATE admin SET password = ?, email = ?, categoria = ?, matricula = ?, sexo = ?, telefone = ? WHERE admin_username = ?");
+    if ($stmt_upd) {
+        $stmt_upd->bind_param("sssssss", $hashedPassword, $email, $categoria, $matricula, $sexo, $telefone, $username);
+        if ($stmt_upd->execute()) {
+            $success_message = "Dados do usuário atualizados com sucesso!";
+        } else {
+            $error_message = "Erro ao atualizar os dados do usuário.";
+        }
+        $stmt_upd->close();
     } else {
-
-        $error_message = "Erro ao atualizar os dados do usuário: " . $conn->error;
-
+        $error_message = "Erro ao preparar a atualização.";
     }
-
 }
 
+$emailValue = '';
+$categoriaValue = '';
+$matriculaValue = '';
+$sexoValue = '';
+$telefoneValue = '';
 
-
-$query = "SELECT * FROM admin WHERE admin_username='$username'";
-
-$result = $conn->query($query);
-
-
-
-if ($result && $result->num_rows > 0) {
-
-    $aluno = $result->fetch_assoc();
-
-
-
-    // Atribui os valores aos campos do formulário
-
-    $passwordValue = $aluno['password'];
-
-    $emailValue = $aluno['email'];
-
-    $categoriaValue = $aluno['categoria'];
-
-    $matriculaValue = $aluno['matricula'];
-
-    $sexoValue = $aluno['sexo'];
-
-    $telefoneValue = $aluno['telefone'];
-
+$stmt_sel = $conn->prepare("SELECT email, categoria, matricula, sexo, telefone FROM admin WHERE admin_username = ? LIMIT 1");
+if ($stmt_sel) {
+    $stmt_sel->bind_param("s", $username);
+    $stmt_sel->execute();
+    $result = $stmt_sel->get_result();
+    if ($result && $result->num_rows > 0) {
+        $aluno = $result->fetch_assoc();
+        $emailValue = $aluno['email'];
+        $categoriaValue = $aluno['categoria'];
+        $matriculaValue = $aluno['matricula'];
+        $sexoValue = $aluno['sexo'];
+        $telefoneValue = $aluno['telefone'];
+    }
+    $stmt_sel->close();
 }
-
-
-
-$conn->close();
 
 ?>
 
@@ -178,16 +130,11 @@ $conn->close();
         <br>
 
         <h2 class="text-black">Atualizar meus dados</h2>
-
         <h2><span style="color: red;">
-                <?php echo $username; ?>
+                <?php echo htmlspecialchars($username); ?>
             </span></h2>
 
-
-
-
-
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+        <form method="POST" action="atualiza_dados.php">
 
             <div class="form-group text-left">
 

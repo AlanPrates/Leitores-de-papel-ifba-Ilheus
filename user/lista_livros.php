@@ -1,57 +1,54 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
-
-// Verifica se o usuário não está logado
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../public/index.php");
-    exit;
-}
+require_login('../public/index.php');
 
 // Consulta SQL para obter o total de quantidade de livros disponíveis
 $query_total_disponivel = "SELECT SUM(quantidade) AS total_disponivel FROM livros";
 $result_total_disponivel = $conn->query($query_total_disponivel);
-$row_total_disponivel = $result_total_disponivel->fetch_assoc();
-$total_disponivel = $row_total_disponivel['total_disponivel'];
+$total_disponivel = 0;
+if ($result_total_disponivel && $row_total = $result_total_disponivel->fetch_assoc()) {
+    $total_disponivel = (int)$row_total['total_disponivel'];
+}
 
-// Definição das variáveis de filtro (mantenha essas linhas, se houver necessidade de filtrar)
-$filtroTitulo = isset($_GET['titulo']) ? $_GET['titulo'] : '';
-$filtroAutor = isset($_GET['autor']) ? $_GET['autor'] : '';
-$filtroAno = isset($_GET['ano']) ? $_GET['ano'] : '';
-$filtroDisponibilidade = isset($_GET['disponibilidade']) ? $_GET['disponibilidade'] : '';
-$filtroOrdem = isset($_GET['ordem']) ? $_GET['ordem'] : '';
+// Definição das variáveis de filtro com sanitização
+$filtroTitulo = isset($_GET['titulo']) ? trim($_GET['titulo']) : '';
+$filtroAutor = isset($_GET['autor']) ? trim($_GET['autor']) : '';
+$filtroAno = isset($_GET['ano']) ? trim($_GET['ano']) : '';
+$filtroDisponibilidade = isset($_GET['disponibilidade']) ? trim($_GET['disponibilidade']) : '';
+$filtroOrdem = isset($_GET['ordem']) ? trim($_GET['ordem']) : '';
 
-// Construção da consulta SQL com os filtros
-$query = "SELECT *, quantidade - quantidade_emprestada AS quantidade_disponivel FROM livros WHERE 1=1";
+// Construção segura da consulta SQL com os filtros
+$query = "SELECT * FROM livros WHERE 1=1";
 
 if (!empty($filtroTitulo)) {
-    $query .= " AND titulo LIKE '%$filtroTitulo%'";
+    $titulo_safe = $conn->real_escape_string($filtroTitulo);
+    $query .= " AND titulo LIKE '%$titulo_safe%'";
 }
 
 if (!empty($filtroAutor)) {
-    $query .= " AND autor LIKE '%$filtroAutor%'";
+    $autor_safe = $conn->real_escape_string($filtroAutor);
+    $query .= " AND autor LIKE '%$autor_safe%'";
 }
 
-if (!empty($filtroAno)) {
-    $query .= " AND ano_publicacao = $filtroAno";
+if (!empty($filtroAno) && is_numeric($filtroAno)) {
+    $ano_safe = (int)$filtroAno;
+    $query .= " AND ano_publicacao = $ano_safe";
 }
 
-if ($filtroDisponibilidade == 'disponivel') {
+if ($filtroDisponibilidade === 'disponivel') {
     $query .= " AND disponivel = 1";
-}
-
-if ($filtroDisponibilidade == 'indisponivel') {
+} elseif ($filtroDisponibilidade === 'indisponivel') {
     $query .= " AND disponivel = 0";
 }
 
 // Adiciona a ordenação ao final da consulta
-if ($filtroOrdem == 'az') {
+if ($filtroOrdem === 'az') {
     $query .= " ORDER BY titulo ASC";
-} elseif ($filtroOrdem == 'za') {
+} elseif ($filtroOrdem === 'za') {
     $query .= " ORDER BY titulo DESC";
 }
 
@@ -150,68 +147,44 @@ if ($result && $result->num_rows > 0) {
             <div class="form-row">
 
                 <div class="col-md-4 mb-3">
-
                     <label for="titulo">Título:</label>
-
                     <input type="text" class="form-control" id="titulo" name="titulo"
-                        placeholder="Digite o título do livro" value="<?php echo $filtroTitulo; ?>">
-
+                        placeholder="Digite o título do livro" value="<?php echo htmlspecialchars($filtroTitulo); ?>">
                 </div>
 
                 <div class="col-md-4 mb-3">
-
                     <label for="autor">Autor:</label>
-
                     <input type="text" class="form-control" id="autor" name="autor" placeholder="Digite o nome do autor"
-                        value="<?php echo $filtroAutor; ?>">
-
+                        value="<?php echo htmlspecialchars($filtroAutor); ?>">
                 </div>
 
                 <div class="col-md-2 mb-3">
-
                     <label for="ano">Ano:</label>
-
                     <input type="text" class="form-control" id="ano" name="ano" placeholder="Digite o ano de publicação"
-                        value="<?php echo $filtroAno; ?>">
-
+                        value="<?php echo htmlspecialchars($filtroAno); ?>">
                 </div>
 
                 <div class="col-md-2 mb-3">
-
                     <label for="disponibilidade">Disponibilidade:</label>
-
                     <select class="form-control" id="disponibilidade" name="disponibilidade">
-
                         <option value="">Todos</option>
-
                         <option value="disponivel" <?php echo ($filtroDisponibilidade == 'disponivel') ? 'selected' : ''; ?>>Disponível</option>
-
                         <option value="indisponivel" <?php echo ($filtroDisponibilidade == 'indisponivel') ? 'selected' : ''; ?>>Indisponível</option>
-
                     </select>
-
                 </div>
 
             </div>
 
             <div class="form-group">
-
                 <label for="ordem">Ordenar por:</label>
-
                 <select class="form-control" id="ordem" name="ordem">
-
                     <option value="">Nenhum</option>
-
                     <option value="az" <?php echo ($filtroOrdem == 'az') ? 'selected' : ''; ?>>A-Z</option>
-
                     <option value="za" <?php echo ($filtroOrdem == 'za') ? 'selected' : ''; ?>>Z-A</option>
-
                 </select>
-
             </div>
 
             <button class="btn btn-warning" type="submit">Filtrar</button>
-
         </form>
         <br>
         <div class="row mb-3">
@@ -222,7 +195,6 @@ if ($result && $result->num_rows > 0) {
                 <a href="devolve_livro.php" class="btn btn-warning btn-block">Devolver Livro</a>
             </div>
         </div>
-
 
         <!-- Adiciona a tabela com os livros paginados -->
         <?php if (!empty($livros_paginados)) { ?>
@@ -242,35 +214,35 @@ if ($result && $result->num_rows > 0) {
                     </thead>
                     <tbody>
                         <?php foreach ($livros_paginados as $livro) {
-                            $quantidade = $livro['quantidade']; // Obtém a quantidade do livro
-                            $disponivel = ($quantidade > 0) ? 'Sim' : 'Não'; // Verifica se o livro está disponível
+                            $quantidade = $livro['quantidade'];
+                            $disponivel = ($quantidade > 0) ? 'Sim' : 'Não';
                             ?>
                             <tr>
                                 <td>
-                                    <?php echo $livro['titulo']; ?>
+                                    <?php echo htmlspecialchars($livro['titulo']); ?>
                                 </td>
                                 <td>
-                                    <?php echo $livro['autor']; ?>
+                                    <?php echo htmlspecialchars($livro['autor']); ?>
                                 </td>
                                 <td>
-                                    <?php echo $livro['ano_publicacao']; ?>
+                                    <?php echo htmlspecialchars($livro['ano_publicacao']); ?>
                                 </td>
                                 <td>
-                                    <?php echo $livro['isbn']; ?>
+                                    <?php echo htmlspecialchars($livro['isbn']); ?>
                                 </td>
                                 <td>
-                                    <?php echo $livro['genero']; ?>
+                                    <?php echo htmlspecialchars($livro['genero']); ?>
                                 </td>
                                 <td>
-                                    <?php echo $quantidade; ?>
+                                    <?php echo htmlspecialchars($quantidade); ?>
                                 </td>
                                 <td>
-                                    <?php echo $disponivel; ?>
+                                    <?php echo htmlspecialchars($disponivel); ?>
                                 </td>
                                 <td>
                                     <?php if ($disponivel == 'Sim') { ?>
                                         <form method="POST" action="empresta_livro.php" style="display: inline;">
-                                            <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
+                                            <input type="hidden" name="livro_id" value="<?php echo htmlspecialchars($livro['id']); ?>">
                                             <input type="submit" class="btn btn-danger" value="Emprestar">
                                         </form>
                                     <?php } else { ?>
@@ -278,10 +250,7 @@ if ($result && $result->num_rows > 0) {
                                     <?php } ?>
                                     <br>
                                     <br>
-                                    <form method="POST" action="devolve_livro.php" style="display: inline;">
-                                        <input type="hidden" name="livro_devolvido" value="<?php echo $livro['id']; ?>">
-                                        <input type="submit" class="btn btn-warning" value="Devolver   ">
-                                    </form>
+                                    <a href="devolve_livro.php" class="btn btn-warning">Ir para Devolução</a>
                                 </td>
                             </tr>
                         <?php } ?>

@@ -101,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <?php
         if (isset($_GET['success_message']) && $_GET['success_message'] !== "") {
           echo '<div class="alert alert-success mt-3 text-center" role="alert">';
-          echo $_GET['success_message'];
+          echo htmlspecialchars($_GET['success_message'], ENT_QUOTES, 'UTF-8');
           echo '</div>';
         }
         ?>
@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <!-- Exibir a mensagem de erro aqui -->
         <?php if (isset($_GET['error']) && $_GET['error'] !== "") { ?>
           <div class="alert alert-danger mt-3 text-center" role="alert">
-            <?php echo $_GET['error']; ?>
+            <?php echo htmlspecialchars($_GET['error'], ENT_QUOTES, 'UTF-8'); ?>
           </div>
         <?php } ?>
         <form action="../actions/login.php" method="POST">

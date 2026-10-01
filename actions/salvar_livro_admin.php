@@ -1,38 +1,40 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
-
-
-
-// Processamento do formulário
+// Apenas administradores autenticados podem cadastrar livros
+require_admin('../public/index.php');
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $titulo = isset($_POST["titulo"]) ? trim($_POST["titulo"]) : '';
+    $autor = isset($_POST["autor"]) ? trim($_POST["autor"]) : '';
 
-    $titulo = $_POST["titulo"];
-
-    $autor = $_POST["autor"];
-
-
-
-    // Inserir o livro no banco de dados
-
-    $sql = "INSERT INTO livros (titulo, autor, disponivel) VALUES ('$titulo', '$autor', 1)";
-
-
-
-    if ($conn->query($sql) === TRUE) {
-
-        echo "Livro cadastrado com sucesso.";
-
-    } else {
-
-        echo "Erro ao cadastrar o livro: " . $conn->error;
-
+    if (empty($titulo)) {
+        $_SESSION['error_message'] = "Título é obrigatório.";
+        header("Location: ../admin/cadastro_livro.php");
+        exit;
     }
 
-}
+    $disponivel = 1;
 
+    $stmt = $conn->prepare("INSERT INTO livros (titulo, autor, disponivel) VALUES (?, ?, ?)");
+    if ($stmt) {
+        $stmt->bind_param("ssi", $titulo, $autor, $disponivel);
+        if ($stmt->execute()) {
+            $_SESSION['success_message'] = "Livro cadastrado com sucesso.";
+        } else {
+            $_SESSION['error_message'] = "Erro ao cadastrar o livro.";
+        }
+        $stmt->close();
+    } else {
+        $_SESSION['error_message'] = "Erro ao preparar cadastro.";
+    }
+
+    header("Location: ../admin/cadastro_livro.php");
+    exit;
+} else {
+    header("Location: ../admin/cadastro_livro.php");
+    exit;
+}

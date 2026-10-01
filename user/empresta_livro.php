@@ -1,180 +1,110 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
+require_login('../public/index.php');
 
+$user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+$success_message = '';
+$error_message = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id'])) {
+    $livro_id = (int)$_POST['livro_id'];
 
-// Verifica se o usuário não está logado
-
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
-}
-
-
-
-// Verifica se o formulário de empréstimo foi enviado
-
-if (isset($_POST['livro_id'])) {
-
-
-
-    $livro_id = $_POST['livro_id'];
-
-    $user_id = $_SESSION['user_id'];
-
-
-
-    // Obter a data atual para a data de empréstimo
-
-    $data_emprestimo = date('Y-m-d H:i:s');
-
-
-
-    // Calcular a data de devolução (adicionar 15 dias à data atual)
-
-    $data_devolucao = date('Y-m-d H:i:s', strtotime('+1 days'));
-
-
-
-    // Verifica a quantidade disponível do livro
-
-    $query = "SELECT quantidade, titulo FROM livros WHERE id = '$livro_id'";
-
-    $result = $conn->query($query);
-
-
-
-    if ($result && $result->num_rows > 0) {
-
-        $livro = $result->fetch_assoc();
-
-        $quantidade = $livro['quantidade'];
-
-        $titulo = $livro['titulo']; // Novo
-
-
-
-        // Verifica se há livros disponíveis para empréstimo
-
-        if ($quantidade > 0) {
-
-            // Insere o livro emprestado no banco de dados com as datas de empréstimo e devolução
-
-            $query = "INSERT INTO livros_emprestados (livro_id, user_id, data_emprestimo, data_devolucao, titulo) VALUES ('$livro_id', '$user_id', '$data_emprestimo', '$data_devolucao', '$titulo')";
-
-            $result = $conn->query($query);
-
-
-
-            if ($result) {
-
-                // Atualiza a quantidade do livro
-
-                $quantidade--;
-
-                $update_query = "UPDATE livros SET quantidade = $quantidade WHERE id = '$livro_id'";
-
-                $update_result = $conn->query($update_query);
-
-
-
-                if ($update_result) {
-
-                    $success_message = "Livro emprestado com sucesso!";
-
-                } else {
-
-                    $error_message = "Erro ao atualizar a quantidade do livro.";
-
-                }
-
-            } else {
-
-                $error_message = "Erro ao emprestar o livro.";
-
-            }
-
-        } else {
-
-            $error_message = "Não há livros disponíveis para empréstimo.";
-
-        }
-
+    if ($livro_id <= 0 || $user_id <= 0) {
+        $error_message = "Parâmetros inválidos para empréstimo.";
     } else {
+        $conn->begin_transaction();
 
-        $error_message = "Livro não encontrado.";
+        try {
+            $stmt = $conn->prepare("SELECT quantidade, titulo FROM livros WHERE id = ? FOR UPDATE");
+            if (!$stmt) {
+                throw new Exception("Erro ao consultar livro.");
+            }
+            $stmt->bind_param("i", $livro_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
 
+            if ($result && $result->num_rows > 0) {
+                $livro = $result->fetch_assoc();
+                $quantidade = (int)$livro['quantidade'];
+                $titulo = $livro['titulo'];
+                $stmt->close();
+
+                if ($quantidade > 0) {
+                    $data_emprestimo = date('Y-m-d H:i:s');
+                    $data_devolucao = date('Y-m-d H:i:s', strtotime('+15 days'));
+
+                    $insert_stmt = $conn->prepare("INSERT INTO livros_emprestados (livro_id, user_id, data_emprestimo, data_devolucao, titulo) VALUES (?, ?, ?, ?, ?)");
+                    if (!$insert_stmt) {
+                        throw new Exception("Erro ao registrar empréstimo.");
+                    }
+                    $insert_stmt->bind_param("iisss", $livro_id, $user_id, $data_emprestimo, $data_devolucao, $titulo);
+                    $insert_stmt->execute();
+                    $insert_stmt->close();
+
+                    $nova_quantidade = $quantidade - 1;
+                    $disponivel = ($nova_quantidade > 0) ? 1 : 0;
+                    $update_stmt = $conn->prepare("UPDATE livros SET quantidade = ?, disponivel = ? WHERE id = ?");
+                    if (!$update_stmt) {
+                        throw new Exception("Erro ao decrementar estoque.");
+                    }
+                    $update_stmt->bind_param("iii", $nova_quantidade, $disponivel, $livro_id);
+                    $update_stmt->execute();
+                    $update_stmt->close();
+
+                    $conn->commit();
+                    $success_message = "Livro emprestado com sucesso!";
+                } else {
+                    $conn->rollback();
+                    $error_message = "Não há livros disponíveis para empréstimo.";
+                }
+            } else {
+                $stmt->close();
+                $conn->rollback();
+                $error_message = "Livro não encontrado.";
+            }
+        } catch (Exception $e) {
+            $conn->rollback();
+            $error_message = $e->getMessage();
+        }
     }
-
 }
-
 ?>
-
-
-
-
-
 <!DOCTYPE html>
-
 <html>
 
-
-
 <head>
-
     <title>Empréstimo de Livro</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="../assets/css/rodape.css">
-
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
-
-
-
 </head>
 
-
-
 <body>
-
     <?php include '../includes/header.php'; ?>
 
-    <div class="container">
-
+    <div class="container mt-4 mb-4" style="min-height: 70vh;">
         <h2>Empréstimo de Livro</h2>
 
-        <?php if (isset($success_message)) { ?>
-
+        <?php if (!empty($success_message)) { ?>
             <div class="alert alert-success">
-                <?php echo $success_message; ?>
+                <?php echo htmlspecialchars($success_message); ?>
             </div>
-
         <?php } ?>
 
-        <?php if (isset($error_message)) { ?>
-
+        <?php if (!empty($error_message)) { ?>
             <div class="alert alert-danger">
-                <?php echo $error_message; ?>
+                <?php echo htmlspecialchars($error_message); ?>
             </div>
-
         <?php } ?>
 
         <br>
-
         <div class="row mb-3 mt-4">
             <div class="col-md-6 mb-2">
                 <a href="lista_livros.php" class="btn btn-warning btn-block">Voltar para Lista de Livros</a>
@@ -183,25 +113,12 @@ if (isset($_POST['livro_id'])) {
                 <a href="devolve_livro.php" class="btn btn-warning btn-block">Devolver Livro</a>
             </div>
         </div>
-
-
-
     </div>
 
     <script src="../assets/js/script.js"></script>
-
     <script src="../assets/js/bootstrap.min.js"></script>
 
-    <?php
-
-    // Inclui o rodapé
-    
-    include '../includes/footer.php';
-
-    ?>
-
+    <?php include '../includes/footer.php'; ?>
 </body>
-
-
 
 </html>

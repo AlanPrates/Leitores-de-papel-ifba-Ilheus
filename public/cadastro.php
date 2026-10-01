@@ -92,7 +92,7 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
         <div class="col-lg-12">
           <div class="shadow p-4">
             <h1 class="mb-4 text-center mx-auto">Cadastro</h1>
-            <form method="POST" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+            <form method="POST" action="cadastro.php">
               <div class="form-group text-left">
                 <label for="nome">Nome Completo<span class="text-danger">*</span>:</label>
                 <input type="text" class="form-control" id="nome" name="nome" required>

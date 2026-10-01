@@ -1,93 +1,56 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
+// Apenas administradores podem cadastrar novos administradores
+require_admin('../public/index.php');
 
+$msg_feedback = '';
+$msg_tipo = '';
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['admin_username']) && isset($_POST['password'])) {
+    $username = trim($_POST['admin_username']);
+    $nome = trim($_POST['nome']);
+    $password = $_POST['password'];
+    $email = trim($_POST['email']);
+    $categoria = trim($_POST['categoria']);
+    $matricula = trim($_POST['matricula']);
+    $datanascimento = trim($_POST['datanascimento']);
+    $sexo = trim($_POST['sexo']);
+    $telefone = trim($_POST['telefone']);
 
-// Verifica se o formulário de registro foi enviado
-
-if (isset($_POST['admin_username']) && isset($_POST['password'])) {
-
-
-
-  // Escapa os valores de entrada para evitar ataques de SQL Injection
-
-  $username = $conn->real_escape_string($_POST['admin_username']);
-
-  $nome = $conn->real_escape_string($_POST['nome']);
-
-  $password = $conn->real_escape_string($_POST['password']);
-
-  $email = $conn->real_escape_string($_POST['email']);
-
-  $categoria = $conn->real_escape_string($_POST['categoria']);
-
-  $matricula = $conn->real_escape_string($_POST['matricula']);
-
-  $datanascimento = $conn->real_escape_string($_POST['datanascimento']);
-
-  $sexo = $conn->real_escape_string($_POST['sexo']);
-
-  $telefone = $conn->real_escape_string($_POST['telefone']);
-
-
-
-  // Verifica se o nome de usuário já existe no banco de dados
-
-  $query_check = "SELECT * FROM admin WHERE admin_username = '$username'";
-
-  $result_check = $conn->query($query_check);
-
-
-
-  if ($result_check && $result_check->num_rows > 0) {
-
-    echo '<script>alert("Nome de usuário já existe. Por favor, escolha outro nome de usuário.");</script>';
-
-  } else {
-
-    // Criptografa a senha usando a função password_hash
-
-    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
-
-
-    // Insere o novo usuário no banco de dados
-
-    $query_insert = "INSERT INTO admin (admin_username, nome, password, email, categoria, matricula, datanascimento, sexo, telefone) VALUES ('$username', '$nome', '$hashedPassword', '$email', '$categoria', '$matricula', '$datanascimento', '$sexo', '$telefone')";
-
-
-
-    if ($conn->query($query_insert)) {
-
-      echo '<script>alert("Usuário registrado com sucesso! Só logar...");</script>';
-
-      // Redirecionar para o painel administrativo após 5 segundos
-
-      header("Refresh: 2; URL=index.php");
-
-      exit; // Encerrar o script após o redirecionamento
-
+    if (empty($username) || empty($password) || empty($nome)) {
+        $msg_feedback = "Por favor, preencha todos os campos obrigatórios.";
+        $msg_tipo = "danger";
     } else {
+        // Verifica se o usuário já existe
+        $stmt_check = $conn->prepare("SELECT id FROM admin WHERE admin_username = ?");
+        $stmt_check->bind_param("s", $username);
+        $stmt_check->execute();
+        $stmt_check->store_result();
 
-      echo '<script>alert("Erro ao registrar o usuário: ' . $conn->error . '");</script>';
+        if ($stmt_check->num_rows > 0) {
+            $msg_feedback = "Nome de usuário já existe. Por favor, escolha outro.";
+            $msg_tipo = "danger";
+        } else {
+            $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+            $stmt_insert = $conn->prepare("INSERT INTO admin (admin_username, nome, password, email, categoria, matricula, datanascimento, sexo, telefone) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+            $stmt_insert->bind_param("sssssssss", $username, $nome, $hashedPassword, $email, $categoria, $matricula, $datanascimento, $sexo, $telefone);
 
+            if ($stmt_insert->execute()) {
+                $msg_feedback = "Administrador registrado com sucesso!";
+                $msg_tipo = "success";
+            } else {
+                $msg_feedback = "Erro ao registrar o administrador.";
+                $msg_tipo = "danger";
+            }
+            $stmt_insert->close();
+        }
+        $stmt_check->close();
     }
-
-  }
-
-} else {
-
-  echo '<script>alert("O formulário de registro não foi enviado.");</script>';
-
 }
-
-
-
 ?>
 
 
@@ -143,6 +106,12 @@ if (isset($_POST['admin_username']) && isset($_POST['password'])) {
         <div class="shadow p-4">
 
           <h1 class="mb-4 text-center mx-auto">Cadastrar Administrador</h1>
+
+          <?php if (!empty($msg_feedback)) { ?>
+            <div class="alert alert-<?php echo htmlspecialchars($msg_tipo); ?>" role="alert">
+              <?php echo htmlspecialchars($msg_feedback); ?>
+            </div>
+          <?php } ?>
 
           <form action="cadastro.php" method="POST">
 

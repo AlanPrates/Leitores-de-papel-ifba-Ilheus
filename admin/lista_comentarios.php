@@ -1,12 +1,10 @@
 <?php
 session_start();
-include '../config/database.php';
 
-// Verifica se o usuário está logado como admin
-if (!isset($_SESSION['admin_username'])) {
-    header("Location: ../public/index.php");
-    exit;
-}
+require_once '../config/database.php';
+require_once '../includes/auth.php';
+
+require_admin('../public/index.php');
 
 // Consulta todos os comentários
 $query_comentarios = "SELECT c.id, l.titulo, u.username, c.comentario
@@ -51,10 +49,10 @@ $result_comentarios = $conn->query($query_comentarios);
                         while ($row_comentario = $result_comentarios->fetch_assoc()) {
                             ?>
                             <tr>
-                                <td><?php echo $row_comentario['id']; ?></td>
-                                <td><?php echo $row_comentario['titulo']; ?></td>
-                                <td><?php echo $row_comentario['username']; ?></td>
-                                <td><?php echo $row_comentario['comentario']; ?></td>
+                                <td><?php echo htmlspecialchars($row_comentario['id']); ?></td>
+                                <td><?php echo htmlspecialchars($row_comentario['titulo']); ?></td>
+                                <td><?php echo htmlspecialchars($row_comentario['username']); ?></td>
+                                <td><?php echo htmlspecialchars($row_comentario['comentario']); ?></td>
                             </tr>
                         <?php } ?>
                     <?php } else { ?>

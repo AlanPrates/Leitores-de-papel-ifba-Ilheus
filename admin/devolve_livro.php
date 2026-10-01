@@ -1,59 +1,29 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
+require_admin('../public/index.php');
 
+$user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+$livros = [];
 
-
-// Verifica se o usuário não está logado
-
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
+if ($user_id > 0) {
+    $stmt = $conn->prepare("SELECT livros.id, livros.titulo, livros.autor, livros.ano_publicacao, livros_emprestados.data_emprestimo, livros_emprestados.data_devolucao
+              FROM livros_emprestados
+              INNER JOIN livros ON livros_emprestados.livro_id = livros.id
+              WHERE livros_emprestados.user_id = ?");
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            $livros = $result->fetch_all(MYSQLI_ASSOC);
+        }
+        $stmt->close();
+    }
 }
-
-
-
-
-
-$user_id = $_SESSION['user_id'];
-
-
-
-// Obtém os livros emprestados pelo usuário atual
-
-$query = "SELECT livros.id, livros.titulo, livros.autor, livros.ano_publicacao, livros_emprestados.data_emprestimo, livros_emprestados.data_devolucao
-
-          FROM livros_emprestados
-
-          INNER JOIN livros ON livros_emprestados.livro_id = livros.id
-
-          WHERE livros_emprestados.user_id = '$user_id'";
-
-
-
-$result = $conn->query($query);
-
-
-
-// Verifica se o usuário possui livros emprestados
-
-if ($result && $result->num_rows > 0) {
-
-    $livros = $result->fetch_all(MYSQLI_ASSOC);
-
-} else {
-
-    $livros = [];
-
-}
-
 ?>
 
 
@@ -166,23 +136,23 @@ if ($result && $result->num_rows > 0) {
                             <tr>
 
                                 <td>
-                                    <?php echo $livro['titulo']; ?>
+                                    <?php echo htmlspecialchars($livro['titulo']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo $livro['autor']; ?>
+                                    <?php echo htmlspecialchars($livro['autor']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo $livro['ano_publicacao']; ?>
+                                    <?php echo htmlspecialchars($livro['ano_publicacao']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo $livro['data_emprestimo']; ?>
+                                    <?php echo htmlspecialchars($livro['data_emprestimo']); ?>
                                 </td>
 
                                 <td>
-                                    <?php echo $livro['data_devolucao']; ?>
+                                    <?php echo htmlspecialchars($livro['data_devolucao']); ?>
                                 </td>
 
                                 <td>

@@ -1,48 +1,34 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
+require_login('../public/index.php');
 
+$user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
+$leituras = [];
+$error_message = '';
 
-
-// Verificar se o usuário está logado
-
-if (isset($_SESSION['username'])) {
-
-
-
-    // Obter o ID do usuário logado
-
-    $user_id = $_SESSION['user_id'];
-
-
-
-    // Consulta o histórico de empréstimos do aluno
-
-    $query = "SELECT historico_emprestimos.*, livros.titulo as livro_titulo, livros.autor as livro_autor, livros.editora as livro_editora, livros.ano_publicacao as livro_ano_publicacao FROM historico_emprestimos JOIN livros ON historico_emprestimos.livro_id = livros.id WHERE user_id='$user_id'";
-
-    $result = $conn->query($query);
-
-
-
-    if ($result === false) {
-
-        $error_message = "Erro na consulta: " . $conn->error;
-
+if ($user_id > 0) {
+    $stmt = $conn->prepare("SELECT historico_emprestimos.*, livros.titulo as livro_titulo, livros.autor as livro_autor, livros.editora as livro_editora, livros.ano_publicacao as livro_ano_publicacao 
+                            FROM historico_emprestimos 
+                            JOIN livros ON historico_emprestimos.livro_id = livros.id 
+                            WHERE user_id = ? 
+                            ORDER BY historico_emprestimos.data_emprestimo DESC");
+    if ($stmt) {
+        $stmt->bind_param("i", $user_id);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result && $result->num_rows > 0) {
+            $leituras = $result->fetch_all(MYSQLI_ASSOC);
+        }
+        $stmt->close();
+    } else {
+        $error_message = "Erro ao carregar o histórico de leituras.";
     }
-
-} else {
-
-    header('Location: ../public/index.php'); // Redirecionar para a página de login se o usuário não estiver logado
-
 }
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -74,43 +60,35 @@ if (isset($_SESSION['username'])) {
 </head>
 
 <body>
-
     <?php include '../includes/header.php'; ?>
 
     <div class="container main-content">
-
         <h2 class="mb-4">Minhas Leituras</h2>
 
-        <?php
-        if (isset($error_message)) {
-            echo '<div class="alert alert-danger" role="alert">' . $error_message . '</div>';
-        } elseif ($result && $result->num_rows > 0) {
-            while ($row = $result->fetch_assoc()) {
-                ?>
-
+        <?php if (!empty($error_message)) { ?>
+            <div class="alert alert-danger" role="alert"><?php echo htmlspecialchars($error_message); ?></div>
+        <?php } elseif (!empty($leituras)) { ?>
+            <?php foreach ($leituras as $row) { ?>
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <?php echo $row['livro_titulo']; ?>
+                            <?php echo htmlspecialchars($row['livro_titulo']); ?>
                         </h5>
                         <h6 class="card-subtitle mb-2 text-muted">
-                            <?php echo $row['livro_autor']; ?>
+                            <?php echo htmlspecialchars($row['livro_autor']); ?>
                         </h6>
                         <p class="card-text">
-                            <strong>Editora:</strong> <?php echo $row['livro_editora']; ?><br>
-                            <strong>Ano de Publicação:</strong> <?php echo $row['livro_ano_publicacao']; ?><br>
-                            <strong>Data Empréstimo:</strong> <?php echo $row['data_emprestimo']; ?><br>
-                            <strong>Data Devolução:</strong> <?php echo $row['data_devolucao']; ?><br>
+                            <strong>Editora:</strong> <?php echo htmlspecialchars($row['livro_editora']); ?><br>
+                            <strong>Ano de Publicação:</strong> <?php echo htmlspecialchars($row['livro_ano_publicacao']); ?><br>
+                            <strong>Data Empréstimo:</strong> <?php echo htmlspecialchars($row['data_emprestimo']); ?><br>
+                            <strong>Data Devolução:</strong> <?php echo htmlspecialchars($row['data_devolucao']); ?><br>
                         </p>
                     </div>
                 </div>
-
-                <?php
-            }
-        } else {
-            echo '<div class="alert alert-info" role="alert">Nenhum registro de empréstimo encontrado.</div>';
-        }
-        ?>
+            <?php } ?>
+        <?php } else { ?>
+            <div class="alert alert-info" role="alert">Nenhum registro de empréstimo encontrado.</div>
+        <?php } ?>
 
         <div class="row mt-4 mb-4">
             <div class="col-md-3 mb-2">
@@ -120,7 +98,6 @@ if (isset($_SESSION['username'])) {
                 <a href="minhas_leituras.php" class="btn btn-danger btn-block">Atualizar Minhas Leituras</a>
             </div>
         </div>
-
     </div>
 
     <script src="../assets/js/script.js"></script>
@@ -129,11 +106,7 @@ if (isset($_SESSION['username'])) {
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
 
-    <?php
-    // Inclui o rodapé
-    include '../includes/footer.php';
-    ?>
-
+    <?php include '../includes/footer.php'; ?>
 </body>
 
 </html>

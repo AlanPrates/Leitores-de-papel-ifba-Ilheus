@@ -1,109 +1,51 @@
 <?php
-
 session_start();
 
-global $conn;
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-include '../config/database.php';
+// Apenas administradores autenticados podem editar livros
+require_admin('../public/index.php');
 
-
-
-// Verifica se o usuário não está logado
-
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
-}
-
-
-
-// Verifica se o ID do livro foi fornecido
-
-if (!isset($_GET['livro_id'])) {
-
+$livro_id = isset($_GET['livro_id']) ? (int)$_GET['livro_id'] : 0;
+if ($livro_id <= 0) {
     header("Location: lista_livros.php");
-
     exit;
-
 }
-
-
-
-// Obtém o ID do livro a ser editado
-
-$livro_id = $_GET['livro_id'];
-
-
 
 // Verifica se o formulário de exclusão foi enviado
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['excluir'])) {
-
-    // Desativa a verificação de chaves estrangeiras temporariamente
-
-    $conn->query("SET FOREIGN_KEY_CHECKS=0");
-
-
-
-    // Exclui o livro do banco de dados
-
-    $query = "DELETE FROM livros WHERE id = $livro_id";
-
-    $result = $conn->query($query);
-
-
-
-    // Ativa a verificação de chaves estrangeiras novamente
-
-    $conn->query("SET FOREIGN_KEY_CHECKS=1");
-
-
-
-    if ($result) {
-
-        // Redireciona de volta para a página de lista de livros
-
+    $stmt_del = $conn->prepare("DELETE FROM livros WHERE id = ?");
+    if ($stmt_del) {
+        $stmt_del->bind_param("i", $livro_id);
+        $stmt_del->execute();
+        $stmt_del->close();
+        $_SESSION['success_message'] = 'Livro excluído com sucesso.';
         header("Location: lista_livros.php");
-
         exit;
-
     } else {
-
-        echo "Erro ao excluir o livro: " . $conn->error;
-
+        $_SESSION['error_message'] = "Erro ao excluir livro.";
     }
-
 }
-
-
 
 // Consulta o livro com base no ID fornecido
-
-$query = "SELECT * FROM livros WHERE id = $livro_id";
-
-$result = $conn->query($query);
-
-
-
-// Verifica se o livro foi encontrado
+$stmt = $conn->prepare("SELECT * FROM livros WHERE id = ? LIMIT 1");
+if (!$stmt) {
+    header("Location: lista_livros.php");
+    exit;
+}
+$stmt->bind_param("i", $livro_id);
+$stmt->execute();
+$result = $stmt->get_result();
 
 if ($result && $result->num_rows > 0) {
-
     $livro = $result->fetch_assoc();
-
 } else {
-
-    // Livro não encontrado, redireciona de volta para a lista de livros
-
+    $stmt->close();
     header("Location: lista_livros.php");
-
     exit;
-
 }
-
+$stmt->close();
 ?>
 
 
@@ -181,122 +123,41 @@ if ($result && $result->num_rows > 0) {
 
         <form method="POST" action="../actions/atualizar_livro.php">
 
-
-
-            <input type="hidden" name="livro_id" value="<?php echo $livro_id; ?>">
-
-
-
-
-
-
+            <input type="hidden" name="livro_id" value="<?php echo htmlspecialchars($livro_id); ?>">
 
             <div class="form-group">
-
-
-
                 <label for="titulo">Título:</label>
-
-
-
                 <input type="text" class="form-control" id="titulo" name="titulo"
-                    value="<?php echo $livro['titulo']; ?>">
-
-
-
+                    value="<?php echo htmlspecialchars($livro['titulo']); ?>">
             </div>
 
-
-
-
-
-
-
             <div class="form-group">
-
-
-
                 <label for="autor">Autor:</label>
-
-
-
-                <input type="text" class="form-control" id="autor" name="autor" value="<?php echo $livro['autor']; ?>">
-
-
-
+                <input type="text" class="form-control" id="autor" name="autor" value="<?php echo htmlspecialchars($livro['autor']); ?>">
             </div>
 
-
-
-
-
-
-
             <div class="form-group">
-
-
-
                 <label for="ano_publicacao">Ano de Publicação:</label>
-
-
-
                 <input type="text" class="form-control" id="ano_publicacao" name="ano_publicacao"
-                    value="<?php echo $livro['ano_publicacao']; ?>">
-
-
-
+                    value="<?php echo htmlspecialchars($livro['ano_publicacao']); ?>">
             </div>
 
             <div class="form-group">
-
-
-
                 <label for="isbn">ISBN:</label>
-
-
-
-                <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo $livro['isbn']; ?>">
-
-
-
+                <input type="text" class="form-control" id="isbn" name="isbn" value="<?php echo htmlspecialchars($livro['isbn']); ?>">
             </div>
 
-
-
-
-
-
-
             <div class="form-group">
-
-
-
                 <label for="genero">Genero:</label>
-
-
-
                 <input type="text" class="form-control" id="genero" name="genero"
-                    value="<?php echo $livro['genero']; ?>">
-
-
-
+                    value="<?php echo htmlspecialchars($livro['genero']); ?>">
             </div>
 
-
-
-
-
-
-
             <div class="form-group">
-
                 <label for="quantidade">Quantidade:</label>
-
-                <input type="text" class="form-control" id="quantidade" name="quantidade"
-                    value="<?php echo $livro['quantidade']; ?>">
-
+                <input type="number" class="form-control" id="quantidade" name="quantidade" min="0"
+                    value="<?php echo htmlspecialchars($livro['quantidade']); ?>">
                 <span id="mensagem"></span>
-
             </div>
 
 

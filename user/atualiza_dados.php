@@ -1,69 +1,60 @@
 <?php
-// Inicia a sessão
 session_start();
-global $conn;
-// Inclui o arquivo de conexão com o banco de dados
-global $conn;
-include '../config/database.php';
 
-// Verifica se o usuário está autenticado
-if (!isset($_SESSION['username'])) {
-    // Redireciona para a página de login ou exibe uma mensagem de erro
-    header('Location: ../public/index.php');
-    exit();
-}
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-// Obtém o nome de usuário a partir da sessão
-$username = $_SESSION['username'];
+require_login('../public/index.php');
 
-// Inicializa as variáveis de mensagem de sucesso e erro
+$username = isset($_SESSION['username']) ? $_SESSION['username'] : '';
 $success_message = "";
 $error_message = "";
 
-// Verifica se o formulário de atualização foi enviado
-if (isset($_POST['password'])) {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['password'])) {
+    $password = $_POST['password'];
+    $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+    $categoria = isset($_POST['categoria']) ? trim($_POST['categoria']) : '';
+    $matricula = isset($_POST['matricula']) ? trim($_POST['matricula']) : '';
+    $sexo = isset($_POST['sexo']) ? trim($_POST['sexo']) : '';
+    $telefone = isset($_POST['telefone']) ? trim($_POST['telefone']) : '';
 
-    // Escapa os valores de entrada para evitar ataques de SQL Injection
-    $password = $conn->real_escape_string($_POST['password']);
-    $email = $conn->real_escape_string($_POST['email']);
-    $categoria = $conn->real_escape_string($_POST['categoria']);
-    $matricula = $conn->real_escape_string($_POST['matricula']);
-    $sexo = $conn->real_escape_string($_POST['sexo']);
-    $telefone = $conn->real_escape_string($_POST['telefone']);
-
-    // Criptografa a senha usando a função password_hash
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-    // Atualiza os dados do usuário existente
-    $query = "UPDATE usuarios SET password='$hashedPassword', email='$email', categoria='$categoria', matricula='$matricula', sexo='$sexo', telefone='$telefone' WHERE username='$username'";
-    $result = $conn->query($query);
-
-    // Verifica se a atualização foi bem-sucedida ou exibe uma mensagem de erro
-    if ($result) {
-        $success_message = "Dados do usuário atualizados com sucesso!";
+    $stmt_upd = $conn->prepare("UPDATE usuarios SET password = ?, email = ?, categoria = ?, matricula = ?, sexo = ?, telefone = ? WHERE username = ?");
+    if ($stmt_upd) {
+        $stmt_upd->bind_param("sssssss", $hashedPassword, $email, $categoria, $matricula, $sexo, $telefone, $username);
+        if ($stmt_upd->execute()) {
+            $success_message = "Dados do usuário atualizados com sucesso!";
+        } else {
+            $error_message = "Erro ao atualizar os dados do usuário.";
+        }
+        $stmt_upd->close();
     } else {
-        $error_message = "Erro ao atualizar os dados do usuário: " . $conn->error;
+        $error_message = "Erro ao preparar a atualização.";
     }
 }
 
-// Seleciona os dados do usuário atual do banco de dados
-$query = "SELECT * FROM usuarios WHERE username='$username'";
-$result = $conn->query($query);
+$emailValue = '';
+$categoriaValue = '';
+$matriculaValue = '';
+$sexoValue = '';
+$telefoneValue = '';
 
-// Verifica se há resultados e atribui os valores aos campos do formulário
-if ($result && $result->num_rows > 0) {
-    $aluno = $result->fetch_assoc();
-    $passwordValue = $aluno['password'];
-    $emailValue = $aluno['email'];
-    $categoriaValue = $aluno['categoria'];
-    $matriculaValue = $aluno['matricula'];
-    $sexoValue = $aluno['sexo'];
-    $telefoneValue = $aluno['telefone'];
+$stmt_sel = $conn->prepare("SELECT email, categoria, matricula, sexo, telefone FROM usuarios WHERE username = ? LIMIT 1");
+if ($stmt_sel) {
+    $stmt_sel->bind_param("s", $username);
+    $stmt_sel->execute();
+    $result = $stmt_sel->get_result();
+    if ($result && $result->num_rows > 0) {
+        $aluno = $result->fetch_assoc();
+        $emailValue = $aluno['email'];
+        $categoriaValue = $aluno['categoria'];
+        $matriculaValue = $aluno['matricula'];
+        $sexoValue = $aluno['sexo'];
+        $telefoneValue = $aluno['telefone'];
+    }
+    $stmt_sel->close();
 }
-
-// Fecha a conexão com o banco de dados
-$conn->close();
-
 ?>
 
 <!DOCTYPE html>
@@ -86,22 +77,21 @@ $conn->close();
     <?php include '../includes/header.php'; ?>
     <div class="container">
         <?php
-        if (isset($_POST['password'])) {
-
-            // Verifica se houve uma mensagem de sucesso
-            if (isset($success_message)) {
-                echo '<div class="alert alert-success">' . $success_message . '</div>';
-            }
+        if (!empty($success_message)) {
+            echo '<div class="alert alert-success">' . htmlspecialchars($success_message) . '</div>';
+        }
+        if (!empty($error_message)) {
+            echo '<div class="alert alert-danger">' . htmlspecialchars($error_message) . '</div>';
         }
         ?>
 
         <br>
         <h2 class="text-black">Atualizar meus dados</h2>
         <h2><span style="color: red;">
-                <?php echo $username; ?>
+                <?php echo htmlspecialchars($username); ?>
             </span></h2>
 
-        <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>">
+        <form method="POST" action="atualiza_dados.php">
             <div class="form-group text-left">
                 <label for="password">Digite sua Senha ou uma nova, para atualizar o seu cadastro:</label>
                 <input type="password" class="form-control" name="password" value="" required>

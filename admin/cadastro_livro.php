@@ -1,61 +1,44 @@
 <?php
-
-// Inicializar a sessão
-
 session_start();
 
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-
-// Verificar se o usuário está logado, redirecionar para o login se não estiver
-
-if (!isset($_SESSION['admin_username'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
-}
-
+require_admin('../public/index.php');
 ?>
-
 <!DOCTYPE html>
-
 <html>
 
-
-
 <head>
-
     <title>Cadastrar Livro - Admin</title>
-
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-
     <link rel="stylesheet" href="../assets/css/style.css">
-
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
-
 </head>
 
-
-
 <body>
-
     <?php include '../includes/header.php'; ?>
 
     <div class="container">
-
         <br>
-
         <br>
-
         <h2>Cadastrar Livro - Admin</h2>
-
         <br>
+
+        <?php if (!empty($_SESSION['success_message'])) { ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo htmlspecialchars($_SESSION['success_message']); unset($_SESSION['success_message']); ?>
+            </div>
+        <?php } ?>
+
+        <?php if (!empty($_SESSION['error_message'])) { ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo htmlspecialchars($_SESSION['error_message']); unset($_SESSION['error_message']); ?>
+            </div>
+        <?php } ?>
 
         <form method="POST" action="../actions/salvar_livro.php">
 

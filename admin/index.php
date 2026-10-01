@@ -1,10 +1,7 @@
 <?php
 session_start();
-
-if (!isset($_SESSION['admin_username']) && !isset($_SESSION['username'])) {
-    header('Location: ../public/index.php');
-    exit(); // Certifique-se de que o script pare aqui após redirecionar
-}
+include_once '../includes/auth.php';
+require_admin();
 ?>
 
 

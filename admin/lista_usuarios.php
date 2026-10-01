@@ -1,22 +1,11 @@
 <?php
-
 session_start();
+include_once '../includes/auth.php';
+require_admin();
 
 global $conn;
-
 include '../config/database.php';
 
-
-
-// Verifica se o usuário não está logado
-
-if (!isset($_SESSION['user_id'])) {
-
-    header("Location: ../public/index.php");
-
-    exit;
-
-}
 
 
 
@@ -201,64 +190,38 @@ if (isset($_GET['ordem']) && ($_GET['ordem'] == 'az' || $_GET['ordem'] == 'za'))
 
 
                     if ($categoria != 'all') {
-
-                        $sql .= " AND categoria = '$categoria'";
-
+                        $eCat = $conn->real_escape_string($categoria);
+                        $sql .= " AND categoria = '$eCat'";
                     }
-
-
 
                     if (!empty($pesquisa)) {
-
-                        $sql .= " AND (username LIKE '%$pesquisa%' OR nome LIKE '%$pesquisa%')";
-
+                        $ePesq = $conn->real_escape_string($pesquisa);
+                        $sql .= " AND (username LIKE '%$ePesq%' OR nome LIKE '%$ePesq%')";
                     }
-
-
 
                     if ($ordem == 'az') {
-
                         $sql .= " ORDER BY nome ASC";
-
                     } else {
-
                         $sql .= " ORDER BY nome DESC";
-
                     }
-
-
 
                     $result = $conn->query($sql);
 
-
-
-                    if ($result->num_rows > 0) {
-
+                    if ($result && $result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
-
                             echo '<tr>';
-
-                            echo '<td>' . $row["id"] . '</td>';
-
-                            echo '<td>' . $row["username"] . '</td>';
-
-                            echo '<td>' . $row["nome"] . '</td>';
-
-                            echo '<td>' . $row["email"] . '</td>';
-
-                            echo '<td>' . $row["categoria"] . '</td>';
-
-                            echo '<td>' . $row["matricula"] . '</td>';
-
-                            echo '<td>' . $row["datanascimento"] . '</td>';
-
-                            echo '<td>' . $row["sexo"] . '</td>';
-
-                            echo '<td>' . $row["telefone"] . '</td>';
-
+                            echo '<td>' . htmlspecialchars($row["id"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["username"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["nome"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["email"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["categoria"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["matricula"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["datanascimento"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["sexo"], ENT_QUOTES, 'UTF-8') . '</td>';
+                            echo '<td>' . htmlspecialchars($row["telefone"], ENT_QUOTES, 'UTF-8') . '</td>';
                             echo '</tr>';
-
                         }
+
 
                     } else {
 

@@ -1,16 +1,12 @@
 <?php
 session_start();
-global $conn;
-include '../config/database.php';
 
-// Verificar se o usuário está logado, redirecionar para o login se não estiver
-if (!isset($_SESSION['admin_username'])) {
-    header("Location: ../public/index.php");
-    exit;
-}
+require_once '../config/database.php';
+require_once '../includes/auth.php';
 
-// Exibir o nome de usuário
-$username = $_SESSION['admin_username'];
+require_admin('../public/index.php');
+
+$username = isset($_SESSION['admin_username']) ? $_SESSION['admin_username'] : '';
 ?>
 <!DOCTYPE html>
 <html>
@@ -23,7 +19,6 @@ $username = $_SESSION['admin_username'];
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
 </head>
 
 <body>
@@ -46,20 +41,19 @@ $username = $_SESSION['admin_username'];
                 </thead>
                 <tbody>
                     <?php
-
                     // Consulta para obter os administradores cadastrados
-                    $sql = "SELECT * FROM admin";
+                    $sql = "SELECT admin_username, nome, email, datanascimento, sexo, telefone FROM admin";
                     $result = $conn->query($sql);
 
-                    if ($result->num_rows > 0) {
+                    if ($result && $result->num_rows > 0) {
                         while ($row = $result->fetch_assoc()) {
                             echo '<tr>';
-                            echo '<td>' . $row["admin_username"] . '</td>';
-                            echo '<td>' . $row["nome"] . '</td>';
-                            echo '<td>' . $row["email"] . '</td>';
-                            echo '<td>' . $row["datanascimento"] . '</td>';
-                            echo '<td>' . $row["sexo"] . '</td>';
-                            echo '<td>' . $row["telefone"] . '</td>';
+                            echo '<td>' . htmlspecialchars($row["admin_username"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["nome"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["email"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["datanascimento"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["sexo"]) . '</td>';
+                            echo '<td>' . htmlspecialchars($row["telefone"]) . '</td>';
                             echo '</tr>';
                         }
                     } else {
