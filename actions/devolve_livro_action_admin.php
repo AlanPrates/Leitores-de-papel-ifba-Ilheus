@@ -41,19 +41,15 @@ if (isset($_POST['livro_id'])) {
 
 
     if ($result) {
-
         $success_message = "Livro devolvido com sucesso!";
-
+        $_SESSION['success_message'] = $success_message;
     } else {
-
         $error_message = "Erro ao devolver o livro.";
-
+        $_SESSION['error_message'] = $error_message;
     }
-
 } else {
-
     $error_message = "ID do livro não fornecido.";
-
+    $_SESSION['error_message'] = $error_message;
 }
 
 

@@ -69,31 +69,23 @@ if (isset($_POST['livro_id'])) {
 
 
             if ($delete_result) {
-
                 $success_message = "Livro devolvido com sucesso! Quantidade atualizada.";
-
+                $_SESSION['success_message'] = $success_message;
             } else {
-
                 $error_message = "Erro ao devolver o livro.";
-
+                $_SESSION['error_message'] = $error_message;
             }
-
         } else {
-
             $error_message = "Erro ao atualizar a quantidade do livro.";
-
+            $_SESSION['error_message'] = $error_message;
         }
-
     } else {
-
         $error_message = "Livro não encontrado.";
-
+        $_SESSION['error_message'] = $error_message;
     }
-
 } else {
-
     $error_message = "ID do livro não fornecido.";
-
+    $_SESSION['error_message'] = $error_message;
 }
 
 

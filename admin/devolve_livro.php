@@ -143,6 +143,25 @@ if ($result && $result->num_rows > 0) {
 
         <h2>Devolver Livro</h2>
 
+        <?php
+        $msg_sucesso = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : (isset($_GET['success_message']) ? $_GET['success_message'] : (isset($_GET['message']) ? $_GET['message'] : null));
+        $msg_erro = isset($_SESSION['error_message']) ? $_SESSION['error_message'] : (isset($_GET['error_message']) ? $_GET['error_message'] : null);
+        if (isset($_SESSION['success_message'])) { unset($_SESSION['success_message']); }
+        if (isset($_SESSION['error_message'])) { unset($_SESSION['error_message']); }
+        ?>
+
+        <?php if (!empty($msg_sucesso)) { ?>
+            <div class="alert alert-success" role="alert">
+                <?php echo htmlspecialchars($msg_sucesso); ?>
+            </div>
+        <?php } ?>
+
+        <?php if (!empty($msg_erro)) { ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo htmlspecialchars($msg_erro); ?>
+            </div>
+        <?php } ?>
+
         <?php if (!empty($livros)) { ?>
 
             <div class="table-responsive">
@@ -197,7 +216,7 @@ if ($result && $result->num_rows > 0) {
 
                                 <td>
 
-                                    <form method="POST" action="devolve_livro_action_admin.php">
+                                    <form method="POST" action="../actions/devolve_livro_action_admin.php">
 
                                         <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
 
