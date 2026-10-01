@@ -250,7 +250,7 @@ if ($result && $result->num_rows > 0) {
                                     <?php } ?>
                                     <br>
                                     <br>
-                                    <a href="devolve_livro.php" class="btn btn-warning">Ir para Devolução</a>
+                                    <a href="devolve_livro.php" class="btn btn-warning">Devolução</a>
                                 </td>
                             </tr>
                         <?php } ?>

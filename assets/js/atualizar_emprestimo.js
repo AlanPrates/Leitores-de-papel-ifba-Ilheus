@@ -1,19 +1,18 @@
 function atualizarDados() {
-    // Cria um objeto XMLHttpRequest para fazer a requisição AJAX
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function() {
-        if (xhr.readyState === XMLHttpRequest.DONE) {
-            if (xhr.status === 200) {
-                // Atualiza o conteúdo do elemento "resultado" com os dados obtidos do servidor
-                document.getElementById("resultado").innerHTML = xhr.responseText;
+        if (xhr.readyState === XMLHttpRequest.DONE && xhr.status === 200) {
+            var el = document.getElementById("resultado");
+            if (el) {
+                el.innerHTML = xhr.responseText;
             }
         }
     };
 
-    // Faz uma requisição GET para o arquivo "atualizar_emprestimos.php"
-    xhr.open("GET", "atualizar_emprestimos.php", true);
+    var endpoint = "../actions/atualizar_emprestimos.php";
+    xhr.open("GET", endpoint, true);
     xhr.send();
 }
 
-// Atualiza os dados a cada 5 segundos
-setInterval(atualizarDados, 1000);
+// Sincroniza em segundo plano de forma não intrusiva a cada 15 segundos
+setInterval(atualizarDados, 15000);

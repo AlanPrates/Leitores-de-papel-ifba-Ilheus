@@ -12,40 +12,25 @@ if ($current_user_id <= 0) {
     exit;
 }
 
-// Busca registros do usuário logado que ainda não estão no seu histórico
-$stmt = $conn->prepare("SELECT livro_id, data_emprestimo, data_devolucao 
-                        FROM livros_emprestados 
-                        WHERE user_id = ? 
-                          AND livro_id NOT IN (
-                              SELECT livro_id FROM historico_emprestimos WHERE user_id = ?
-                          )");
+// Sincroniza empréstimos ativos que ainda não estão gravados no histórico
+$sync_stmt = $conn->prepare("
+    INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao)
+    SELECT le.livro_id, le.user_id, le.data_emprestimo, le.data_devolucao
+    FROM livros_emprestados le
+    WHERE le.user_id = ?
+      AND NOT EXISTS (
+          SELECT 1 FROM historico_emprestimos he
+          WHERE he.livro_id = le.livro_id 
+            AND he.user_id = le.user_id 
+            AND he.data_emprestimo = le.data_emprestimo
+      )
+");
 
-if (!$stmt) {
-    exit;
+if ($sync_stmt) {
+    $sync_stmt->bind_param("i", $current_user_id);
+    $sync_stmt->execute();
+    $sync_stmt->close();
 }
 
-$stmt->bind_param("ii", $current_user_id, $current_user_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-if ($result && $result->num_rows > 0) {
-    $insert_stmt = $conn->prepare("INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)");
-    
-    while ($row = $result->fetch_assoc()) {
-        $livro_id = (int)$row["livro_id"];
-        $data_emprestimo = $row["data_emprestimo"];
-        $data_devolucao = $row["data_devolucao"];
-
-        if ($insert_stmt) {
-            $insert_stmt->bind_param("iiss", $livro_id, $current_user_id, $data_emprestimo, $data_devolucao);
-            $insert_stmt->execute();
-        }
-    }
-
-    if ($insert_stmt) {
-        $insert_stmt->close();
-    }
-}
-
-$stmt->close();
 $conn->close();
+echo "OK";

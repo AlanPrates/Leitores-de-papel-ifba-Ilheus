@@ -76,7 +76,7 @@ $pesquisar = isset($_GET['pesquisar']);
         <br>
 
         <?php
-        if ($listar_todos || ($pesquisar && !empty($matricula))) {
+        if ($listar_todos || ($pesquisar && (!empty($matricula) || !empty($data_inicio) || !empty($data_fim)))) {
             $sql = "SELECT u.nome, l.titulo, l.autor, le.data_emprestimo, le.data_devolucao
                     FROM livros_emprestados le
                     INNER JOIN usuarios u ON u.id = le.user_id
@@ -91,11 +91,16 @@ $pesquisar = isset($_GET['pesquisar']);
                 $types .= "s";
             }
 
-            if (!empty($data_inicio) && !empty($data_fim)) {
-                $sql .= " AND le.data_emprestimo >= ? AND le.data_emprestimo <= ?";
-                $params[] = $data_inicio;
-                $params[] = $data_fim;
-                $types .= "ss";
+            if (!empty($data_inicio)) {
+                $sql .= " AND le.data_emprestimo >= ?";
+                $params[] = $data_inicio . " 00:00:00";
+                $types .= "s";
+            }
+
+            if (!empty($data_fim)) {
+                $sql .= " AND le.data_emprestimo <= ?";
+                $params[] = $data_fim . " 23:59:59";
+                $types .= "s";
             }
 
             $sql .= " ORDER BY le.data_emprestimo DESC";
@@ -104,7 +109,7 @@ $pesquisar = isset($_GET['pesquisar']);
             if ($stmt) {
                 if (!empty($params)) {
                     // PHP 5.6 compatible dynamic bind_param
-                    $bind_names[] = $types;
+                    $bind_names = array($types);
                     for ($i = 0; $i < count($params); $i++) {
                         $bind_name = 'bind' . $i;
                         $$bind_name = $params[$i];
@@ -141,8 +146,8 @@ $pesquisar = isset($_GET['pesquisar']);
             } else {
                 echo '<div class="alert alert-danger">Erro ao processar consulta.</div>';
             }
-        } elseif ($pesquisar && empty($matricula)) {
-            echo '<div class="alert alert-warning">Por favor, forneça uma matrícula válida para pesquisar.</div>';
+        } elseif ($pesquisar && empty($matricula) && empty($data_inicio) && empty($data_fim)) {
+            echo '<div class="alert alert-warning">Por favor, forneça ao menos um filtro (matrícula ou período) para pesquisar.</div>';
         }
         ?>
     </div>

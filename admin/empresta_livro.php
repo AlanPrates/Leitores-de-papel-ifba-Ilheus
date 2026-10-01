@@ -44,6 +44,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id'])) {
                     $insert_stmt->execute();
                     $insert_stmt->close();
 
+                    // Grava imediatamente no histórico de leituras
+                    $insert_hist = $conn->prepare("INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)");
+                    if ($insert_hist) {
+                        $insert_hist->bind_param("iiss", $livro_id, $user_id, $data_emprestimo, $data_devolucao);
+                        $insert_hist->execute();
+                        $insert_hist->close();
+                    }
+
                     $update_stmt = $conn->prepare("UPDATE livros SET quantidade = quantidade - 1 WHERE id = ?");
                     if (!$update_stmt) {
                         throw new Exception("Erro ao decrementar estoque.");

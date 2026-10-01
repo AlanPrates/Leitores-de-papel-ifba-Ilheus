@@ -10,6 +10,25 @@ $current_user_id = isset($_SESSION['user_id']) ? (int)$_SESSION['user_id'] : 0;
 $historico = [];
 
 if ($current_user_id > 0) {
+    // Sincroniza qualquer empréstimo ativo com o histórico
+    $sync_stmt = $conn->prepare("
+        INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao)
+        SELECT le.livro_id, le.user_id, le.data_emprestimo, le.data_devolucao
+        FROM livros_emprestados le
+        WHERE le.user_id = ?
+          AND NOT EXISTS (
+              SELECT 1 FROM historico_emprestimos he
+              WHERE he.livro_id = le.livro_id 
+                AND he.user_id = le.user_id 
+                AND he.data_emprestimo = le.data_emprestimo
+          )
+    ");
+    if ($sync_stmt) {
+        $sync_stmt->bind_param("i", $current_user_id);
+        $sync_stmt->execute();
+        $sync_stmt->close();
+    }
+
     $stmt = $conn->prepare("SELECT l.titulo, l.autor, he.data_emprestimo, he.data_devolucao
                             FROM historico_emprestimos he
                             INNER JOIN livros l ON l.id = he.livro_id

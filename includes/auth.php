@@ -23,7 +23,7 @@ function require_login($redirectUrl = '../public/index.php') {
  * Exige que o usuário possua perfil de administrador
  */
 function require_admin($redirectUrl = '../public/index.php') {
-    $isAdmin = !empty($_SESSION['admin_username']) || (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === true);
+    $isAdmin = !empty($_SESSION['admin_username']) || (!empty($_SESSION['is_admin']) && ($_SESSION['is_admin'] === true || $_SESSION['is_admin'] == 1));
     if (!$isAdmin) {
         header("Location: " . $redirectUrl . "?error=" . urlencode("Acesso restrito a administradores."));
         exit;

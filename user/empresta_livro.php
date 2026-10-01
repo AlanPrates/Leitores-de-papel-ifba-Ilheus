@@ -45,6 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id'])) {
                     $insert_stmt->execute();
                     $insert_stmt->close();
 
+                    // Grava imediatamente no histórico de leituras
+                    $insert_hist = $conn->prepare("INSERT INTO historico_emprestimos (livro_id, user_id, data_emprestimo, data_devolucao) VALUES (?, ?, ?, ?)");
+                    if ($insert_hist) {
+                        $insert_hist->bind_param("iiss", $livro_id, $user_id, $data_emprestimo, $data_devolucao);
+                        $insert_hist->execute();
+                        $insert_hist->close();
+                    }
+
                     $nova_quantidade = $quantidade - 1;
                     $disponivel = ($nova_quantidade > 0) ? 1 : 0;
                     $update_stmt = $conn->prepare("UPDATE livros SET quantidade = ?, disponivel = ? WHERE id = ?");
