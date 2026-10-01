@@ -60,7 +60,7 @@ if (isset($_POST['livro_id'])) {
 
 // Redireciona de volta para a página de devolução de livros
 
-header("Location: ../admin/devolve_livro.php?message=" . urlencode($success_message ?? $error_message));
-
+$message = isset($success_message) ? $success_message : (isset($error_message) ? $error_message : '');
+header("Location: ../admin/devolve_livro.php?message=" . urlencode($message));
 exit;
 
