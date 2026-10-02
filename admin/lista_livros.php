@@ -104,406 +104,368 @@ if ($result && $result->num_rows > 0) {
 
 
 <!DOCTYPE html>
-
-<html>
-
-
+<html lang="pt-br">
 
 <head>
-
-    <title>Lista de Livros</title>
-
+    <meta charset="UTF-8">
+    <title>Lista de Livros - Administração</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
-
     <link rel="stylesheet" href="../assets/css/rodape.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
 
     <style>
-        .table-responsive {
-
-            overflow-x: auto;
-
+        .book-list-wrapper {
+            width: 96% !important;
+            max-width: 1440px !important;
+            margin: 30px auto !important;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eef2f6;
         }
 
+        .book-list-wrapper h2 {
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+            margin-bottom: 0;
+        }
 
+        .stat-badge {
+            background-color: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            padding: 10px 18px;
+            font-weight: 600;
+            font-size: 14px;
+            display: inline-flex;
+            align-items: center;
+        }
 
-        @media (max-width: 576px) {
+        .filter-panel {
+            background-color: #f8fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            border: 1px solid #e2e8f0;
+        }
 
-            .btn-group-vertical {
+        .filter-panel label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #475569;
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-                display: flex;
+        .table-responsive {
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+        }
 
-                flex-direction: column;
+        .table-books {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: collapse;
+        }
 
-                align-items: center;
+        .table-books thead th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            vertical-align: middle;
+            text-align: center;
+            padding: 14px 16px;
+            border-bottom: 2px solid #cbd5e1;
+            border-top: none;
+        }
 
-                margin-top: 1rem;
+        .table-books tbody td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 13px 16px;
+            font-size: 14px;
+            color: #334155;
+            border-top: 1px solid #f1f5f9;
+        }
 
+        .table-books tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table-books td.col-titulo {
+            text-align: left;
+            font-weight: 600;
+            color: #0f172a;
+            min-width: 200px;
+        }
+
+        .table-books td.col-autor {
+            text-align: left;
+            min-width: 160px;
+            color: #475569;
+        }
+
+        .table-books td.nowrap-cell {
+            white-space: nowrap;
+        }
+
+        .badge-status-sim {
+            background-color: #dcfce7;
+            color: #166534;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .badge-status-nao {
+            background-color: #fee2e2;
+            color: #991b1b;
+            font-weight: 600;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: inline-block;
+        }
+
+        .badge-genre {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .actions-cell {
+            white-space: nowrap;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+        }
+
+        @media (max-width: 768px) {
+            .book-list-wrapper {
+                width: 100% !important;
+                margin: 15px auto !important;
+                padding: 20px 15px;
+                border-radius: 0;
+                border: none;
             }
-
         }
     </style>
-
 </head>
 
-
-
 <body>
-
     <?php include '../includes/header.php'; ?>
 
-    <div class="container">
-
-        <h2>Lista de Livros</h2>
-
-        <div class="alert alert-warning" role="alert">
-
-            Total de Livros Disponíveis:
-            <?php echo $total_disponivel; ?>
-
+    <div class="book-list-wrapper">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+            <div>
+                <h2><i class="fa fa-book text-danger mr-2"></i>Lista de Livros</h2>
+                <small class="text-muted">Gerencie o acervo da biblioteca do IFBA</small>
+            </div>
+            <div class="stat-badge mt-2 mt-sm-0">
+                <i class="fa fa-book-open mr-2 text-warning"></i>
+                Total de Livros Disponíveis:&nbsp;<strong><?php echo $total_disponivel; ?></strong>
+            </div>
         </div>
 
-        <!-- Adicione após a consulta SQL para obter o total de quantidade de livros disponíveis -->
-
-        <?php if (isset($_GET['success']) && $_GET['success'] == 'true'): ?>
-
-            <div class="alert alert-success" role="alert">
-
-                Livro atualizado com sucesso!
-
-            </div>
-
-        <?php endif; ?>
-
         <?php
-
         if (isset($_SESSION['success_message'])) {
-
-            echo '<div class="alert alert-success" role="alert">' . $_SESSION['success_message'] . '</div>';
-
+            echo '<div class="alert alert-success alert-dismissible fade show" role="alert">' . htmlspecialchars($_SESSION['success_message']) . '</div>';
             unset($_SESSION['success_message']);
-
         }
-
-
 
         if (isset($_SESSION['error_message'])) {
-
-            echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error_message'] . '</div>';
-
+            echo '<div class="alert alert-danger alert-dismissible fade show" role="alert">' . htmlspecialchars($_SESSION['error_message']) . '</div>';
             unset($_SESSION['error_message']);
-
         }
-
         ?>
 
+        <div class="filter-panel">
+            <form method="get" action="lista_livros.php">
+                <div class="form-row">
+                    <div class="col-md-4 mb-3">
+                        <label for="titulo">Título</label>
+                        <input type="text" class="form-control" id="titulo" name="titulo"
+                            placeholder="Digite o título do livro" value="<?php echo htmlspecialchars($filtroTitulo, ENT_QUOTES, 'UTF-8'); ?>">
+                    </div>
 
+                    <div class="col-md-3 mb-3">
+                        <label for="autor">Autor</label>
+                        <input type="text" class="form-control" id="autor" name="autor" placeholder="Digite o nome do autor"
+                            value="<?php echo htmlspecialchars($filtroAutor, ENT_QUOTES, 'UTF-8'); ?>">
+                    </div>
 
-        <form method="get" action="lista_livros.php">
+                    <div class="col-md-2 mb-3">
+                        <label for="ano">Ano</label>
+                        <input type="text" class="form-control" id="ano" name="ano" placeholder="Ex: 2024"
+                            value="<?php echo htmlspecialchars($filtroAno, ENT_QUOTES, 'UTF-8'); ?>">
+                    </div>
 
-            <div class="form-row">
-
-                <div class="col-md-4 mb-3">
-
-                    <label for="titulo">Título:</label>
-
-                    <input type="text" class="form-control" id="titulo" name="titulo"
-                        placeholder="Digite o título do livro" value="<?php echo htmlspecialchars($filtroTitulo, ENT_QUOTES, 'UTF-8'); ?>">
-
+                    <div class="col-md-3 mb-3">
+                        <label for="disponibilidade">Disponibilidade</label>
+                        <select class="form-control" id="disponibilidade" name="disponibilidade">
+                            <option value="">Todas</option>
+                            <option value="disponivel" <?php echo ($filtroDisponibilidade == 'disponivel') ? 'selected' : ''; ?>>Disponível</option>
+                            <option value="indisponivel" <?php echo ($filtroDisponibilidade == 'indisponivel') ? 'selected' : ''; ?>>Indisponível</option>
+                        </select>
+                    </div>
                 </div>
 
-                <div class="col-md-4 mb-3">
-
-                    <label for="autor">Autor:</label>
-
-                    <input type="text" class="form-control" id="autor" name="autor" placeholder="Digite o nome do autor"
-                        value="<?php echo htmlspecialchars($filtroAutor, ENT_QUOTES, 'UTF-8'); ?>">
-
+                <div class="form-row align-items-end">
+                    <div class="col-md-4 mb-3">
+                        <label for="ordem">Ordenar por</label>
+                        <select class="form-control" id="ordem" name="ordem">
+                            <option value="">Padrão</option>
+                            <option value="az" <?php echo ($filtroOrdem == 'az') ? 'selected' : ''; ?>>Título (A-Z)</option>
+                            <option value="za" <?php echo ($filtroOrdem == 'za') ? 'selected' : ''; ?>>Título (Z-A)</option>
+                        </select>
+                    </div>
+                    <div class="col-md-8 mb-3 text-right">
+                        <button class="btn btn-warning px-4" type="submit">
+                            <i class="fa fa-filter mr-1"></i> Filtrar
+                        </button>
+                        <a href="lista_livros.php" class="btn btn-outline-secondary ml-2">
+                            <i class="fa fa-times mr-1"></i> Limpar
+                        </a>
+                    </div>
                 </div>
-
-                <div class="col-md-2 mb-3">
-
-                    <label for="ano">Ano:</label>
-
-                    <input type="text" class="form-control" id="ano" name="ano" placeholder="Digite o ano de publicação"
-                        value="<?php echo htmlspecialchars($filtroAno, ENT_QUOTES, 'UTF-8'); ?>">
-
-
-                </div>
-
-                <div class="col-md-2 mb-3">
-
-                    <label for="disponibilidade">Disponibilidade:</label>
-
-                    <select class="form-control" id="disponibilidade" name="disponibilidade">
-
-                        <option value="">Todos</option>
-
-                        <option value="disponivel" <?php echo ($filtroDisponibilidade == 'disponivel') ? 'selected' : ''; ?>>Disponível</option>
-
-                        <option value="indisponivel" <?php echo ($filtroDisponibilidade == 'indisponivel') ? 'selected' : ''; ?>>Indisponível</option>
-
-                    </select>
-
-                </div>
-
-            </div>
-
-            <div class="form-group">
-
-                <label for="ordem">Ordenar por:</label>
-
-                <select class="form-control" id="ordem" name="ordem">
-
-                    <option value="">Nenhum</option>
-
-                    <option value="az" <?php echo ($filtroOrdem == 'az') ? 'selected' : ''; ?>>A-Z</option>
-
-                    <option value="za" <?php echo ($filtroOrdem == 'za') ? 'selected' : ''; ?>>Z-A</option>
-
-                </select>
-
-            </div>
-
-            <button class="btn btn-warning" type="submit">Filtrar</button>
-
-        </form>
-
-        <br>
+            </form>
+        </div>
 
         <div class="row mb-3">
             <div class="col-md-6 mb-2">
-                <a href="index.php" class="btn btn-warning btn-block">Voltar para Painel de Usuário</a>
+                <a href="index.php" class="btn btn-warning btn-block">
+                    <i class="fa fa-arrow-left mr-1"></i> Voltar para Painel Admin
+                </a>
             </div>
             <div class="col-md-6 mb-2">
-                <a href="cadastro_livro.php" class="btn btn-warning btn-block">Cadastro de Livros</a>
+                <a href="cadastro_livro.php" class="btn btn-danger btn-block">
+                    <i class="fa fa-plus-circle mr-1"></i> Cadastrar Novo Livro
+                </a>
             </div>
         </div>
-
-        <!-- Adiciona a tabela com os livros paginados -->
 
         <?php if (!empty($livros_paginados)) { ?>
-
             <div class="table-responsive">
-
-                <table class="table table-striped">
-
+                <table class="table-books table-striped">
                     <thead>
-
                         <tr>
-
                             <th>Título</th>
-
                             <th>Autor</th>
-
-                            <th>Ano de Publicação</th>
-
+                            <th>Ano</th>
                             <th>ISBN</th>
-
-                            <th>Genero</th>
-
-                            <th>Quantidade</th>
-
+                            <th>Gênero</th>
+                            <th>Qtd</th>
                             <th>Disponível</th>
-
-                            <th>Ação</th>
-
+                            <th>Ações</th>
                         </tr>
-
                     </thead>
-
                     <tbody>
-
                         <?php foreach ($livros_paginados as $livro) {
-
-                            $quantidade = $livro['quantidade']; // Obtém a quantidade do livro
-                    
-                            $disponivel = ($quantidade > 0) ? 'Sim' : 'Não'; // Verifica se o livro está disponível
-                    
-
-
-
-
-                            // Atualiza a quantidade do livro quando emprestado ou devolvido
-                    
-                            if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id']) && $_POST['livro_id'] == $livro['id']) {
-
-                                if ($quantidade > 0) {
-
-                                    // Livro emprestado, diminui a quantidade
-                    
-                                    $quantidade--;
-
-                                    // Adicione aqui o código para atualizar a quantidade no banco de dados
-                    
-                                }
-
-                            } elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_devolvido']) && $_POST['livro_devolvido'] == $livro['id']) {
-
-                                // Livro devolvido, aumenta a quantidade
-                    
-                                $quantidade++;
-
-                                // Adicione aqui o código para atualizar a quantidade no banco de dados
-                    
-                            }
-
+                            $quantidade = $livro['quantidade'];
+                            $disponivel = ($quantidade > 0) ? 'Sim' : 'Não';
                             ?>
-
                             <tr>
-
-                                <td>
-                                    <?php echo $livro['titulo']; ?>
+                                <td class="col-titulo">
+                                    <?php echo htmlspecialchars($livro['titulo']); ?>
                                 </td>
-
-                                <td>
-                                    <?php echo $livro['autor']; ?>
+                                <td class="col-autor">
+                                    <?php echo htmlspecialchars($livro['autor']); ?>
                                 </td>
-
-                                <td>
-                                    <?php echo $livro['ano_publicacao']; ?>
+                                <td class="nowrap-cell">
+                                    <?php echo htmlspecialchars($livro['ano_publicacao']); ?>
                                 </td>
-
-                                <td>
-                                    <?php echo $livro['isbn']; ?>
+                                <td class="nowrap-cell">
+                                    <code><?php echo htmlspecialchars($livro['isbn']); ?></code>
                                 </td>
-
-                                <td>
-                                    <?php echo $livro['genero']; ?>
+                                <td class="nowrap-cell">
+                                    <span class="badge-genre"><?php echo htmlspecialchars($livro['genero']); ?></span>
                                 </td>
-
-                                <td>
-                                    <?php echo $quantidade; ?>
+                                <td class="nowrap-cell font-weight-bold">
+                                    <?php echo (int)$quantidade; ?>
                                 </td>
-
-                                <td>
-                                    <?php echo $disponivel; ?>
-                                </td>
-
-                                <td>
-
-                                    <?php if ($disponivel == 'Sim') { ?>
-
+                                <td class="nowrap-cell">
+                                    <?php if ($disponivel === 'Sim') { ?>
+                                        <span class="badge-status-sim"><i class="fa fa-check mr-1"></i>Sim</span>
                                     <?php } else { ?>
-
-                                        Livro indisponível
-
+                                        <span class="badge-status-nao"><i class="fa fa-times mr-1"></i>Não</span>
                                     <?php } ?>
-
-
-
-                                    <!-- Botão Editar -->
-
-                                    <form method="GET" action="editar_livro.php" style="display: inline;">
-
-                                        <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
-
-                                        <input type="submit" class="btn btn-primary" value="Editar Livro ">
-
-                                    </form>
-
-                                    <br>
-
-                                    <br>
-
-                                    <!-- Botão Excluir -->
-
-                                    <form method="POST" action="excluir_livro.php" style="display: inline;">
-
-                                        <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
-
-                                        <input type="submit" class="btn btn-danger" value="Excluir Livro">
-
-                                    </form>
-
                                 </td>
-
+                                <td class="nowrap-cell">
+                                    <div class="actions-cell">
+                                        <a href="editar_livro.php?livro_id=<?php echo urlencode($livro['id']); ?>" class="btn btn-sm btn-outline-primary" title="Editar Livro">
+                                            <i class="fa fa-edit mr-1"></i>Editar
+                                        </a>
+                                        <form method="POST" action="excluir_livro.php" style="display: inline-block; margin: 0;" onsubmit="return confirm('Tem certeza de que deseja excluir este livro?');">
+                                            <input type="hidden" name="livro_id" value="<?php echo htmlspecialchars($livro['id']); ?>">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" title="Excluir Livro">
+                                                <i class="fa fa-trash mr-1"></i>Excluir
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
                             </tr>
-
                         <?php } ?>
-
                     </tbody>
-
                 </table>
-
             </div>
-
         <?php } else { ?>
-
-            <p>Nenhum livro encontrado com os critérios de busca.</p>
-
+            <div class="alert alert-info text-center py-4 my-3" role="alert">
+                <i class="fa fa-info-circle mr-1"></i> Nenhum livro encontrado com os critérios de busca.
+            </div>
         <?php } ?>
 
-        <!-- Adicione a mensagem de aviso aqui -->
-
-        <div class="alert alert-warning text-center mb-0 d-md-none" role="alert">
-
-            Por favor, role a página horizontalmente para visualizar a tabela completa.
-
+        <div class="alert alert-warning text-center mt-3 mb-0 d-md-none" role="alert">
+            <i class="fa fa-arrows-alt-h mr-1"></i> Role a página horizontalmente para visualizar a tabela completa.
         </div>
 
-        <!-- Após o loop que exibe os comentários do livro -->
+        <div class="d-flex justify-content-between align-items-center mt-4 flex-wrap">
+            <div>
+                <?php if (isset($_SESSION['admin_username'])) { ?>
+                    <a href="lista_comentarios.php" class="btn btn-outline-secondary">
+                        <i class="fa fa-comments mr-1"></i> Ver Comentários dos Livros
+                    </a>
+                <?php } ?>
+            </div>
 
-        <div class="mt-4">
-
-            <?php if (isset($_SESSION['admin_username'])) { ?>
-
-                <a href="lista_comentarios.php" class="btn btn-primary">Ver os comentários dos livros</a>
-
-            <?php } ?>
-
+            <?php if ($num_paginas > 1): ?>
+                <nav aria-label="Navegação de página" class="mt-2 mt-sm-0">
+                    <ul class="pagination mb-0">
+                        <?php for ($i = 1; $i <= $num_paginas; $i++): ?>
+                            <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
+                                <a class="page-link" href="lista_livros.php?pagina=<?php echo $i; ?>&titulo=<?php echo urlencode($filtroTitulo); ?>&autor=<?php echo urlencode($filtroAutor); ?>&ano=<?php echo urlencode($filtroAno); ?>&disponibilidade=<?php echo urlencode($filtroDisponibilidade); ?>&ordem=<?php echo urlencode($filtroOrdem); ?>">
+                                    <?php echo $i; ?>
+                                </a>
+                            </li>
+                        <?php endfor; ?>
+                    </ul>
+                </nav>
+            <?php endif; ?>
         </div>
-
-        <br>
-
-        <?php if ($num_paginas > 1): ?>
-
-            <nav aria-label="Navegação de página">
-
-                <ul class="pagination">
-
-                    <?php for ($i = 1; $i <= $num_paginas; $i++): ?>
-
-                        <li class="page-item <?php echo ($pagina == $i) ? 'active' : ''; ?>">
-
-                            <a class="page-link" href="lista_livros.php?pagina=<?php echo $i; ?>">
-                                <?php echo $i; ?>
-                            </a>
-
-                        </li>
-
-                    <?php endfor; ?>
-
-                </ul>
-
-            </nav>
-
-        <?php endif; ?>
-
-
-
-
-
     </div>
 
     <script src="../assets/js/script.js"></script>
-
-    <?php
-
-    // Inclui o rodapé
-    
-    include '../includes/footer.php';
-
-    ?>
-
+    <?php include '../includes/footer.php'; ?>
 </body>
-
-
 
 </html>

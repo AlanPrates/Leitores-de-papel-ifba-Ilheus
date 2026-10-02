@@ -82,13 +82,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id'])) {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 
 <head>
-    <title>Empréstimo de Livro</title>
+    <meta charset="UTF-8">
+    <title>Empréstimo de Livro - Leitores de Papel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/rodape.css">
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
@@ -97,35 +99,37 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['livro_id'])) {
 <body>
     <?php include '../includes/header.php'; ?>
 
-    <div class="container mt-4 mb-4" style="min-height: 70vh;">
-        <h2>Empréstimo de Livro</h2>
+    <div class="container container-form mt-4 mb-4" style="min-height: 60vh;">
+        <h2><i class="fa fa-book-reader text-danger mr-2"></i>Empréstimo de Livro</h2>
 
         <?php if (!empty($success_message)) { ?>
-            <div class="alert alert-success">
-                <?php echo htmlspecialchars($success_message); ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa fa-check-circle mr-1"></i> <?php echo htmlspecialchars($success_message); ?>
             </div>
         <?php } ?>
 
         <?php if (!empty($error_message)) { ?>
-            <div class="alert alert-danger">
-                <?php echo htmlspecialchars($error_message); ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-circle mr-1"></i> <?php echo htmlspecialchars($error_message); ?>
             </div>
         <?php } ?>
 
-        <br>
-        <div class="row mb-3 mt-4">
+        <div class="row mt-4">
             <div class="col-md-6 mb-2">
-                <a href="lista_livros.php" class="btn btn-warning btn-block">Voltar para Lista de Livros</a>
+                <a href="lista_livros.php" class="btn btn-warning btn-block">
+                    <i class="fa fa-arrow-left mr-1"></i> Voltar ao Catálogo
+                </a>
             </div>
             <div class="col-md-6 mb-2">
-                <a href="devolve_livro.php" class="btn btn-warning btn-block">Devolver Livro</a>
+                <a href="devolve_livro.php" class="btn btn-outline-danger btn-block">
+                    <i class="fa fa-undo mr-1"></i> Meus Empréstimos Ativos
+                </a>
             </div>
         </div>
     </div>
 
     <script src="../assets/js/script.js"></script>
     <script src="../assets/js/bootstrap.min.js"></script>
-
     <?php include '../includes/footer.php'; ?>
 </body>
 

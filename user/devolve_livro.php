@@ -28,64 +28,149 @@ if ($user_id > 0) {
 
 
 <!DOCTYPE html>
-
-<html>
-
-
+<html lang="pt-br">
 
 <head>
-
-    <title>Devolver Livro</title>
-
+    <meta charset="UTF-8">
+    <title>Devolver Livro - Leitores de Papel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-
-    <link rel="stylesheet" href="../assets/css/rodape.css">
-
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
+    <link rel="stylesheet" href="../assets/css/rodape.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
 
     <style>
-        html, body {
-            height: 100%;
+        .devolve-wrapper {
+            width: 96% !important;
+            max-width: 1440px !important;
+            margin: 30px auto !important;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eef2f6;
         }
 
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
+        .devolve-wrapper h2 {
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+            margin-bottom: 25px;
         }
 
-        .container {
-            flex: 1 0 auto;
-            margin-top: 20px;
-            margin-bottom: 30px;
+        .table-responsive {
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
         }
 
-        footer, .footer {
-            flex-shrink: 0;
-            margin-top: auto;
+        .table-devolucao {
+            width: 100%;
+            margin-bottom: 0;
+            border-collapse: collapse;
+        }
+
+        .table-devolucao thead th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            white-space: nowrap;
+            vertical-align: middle;
+            text-align: center;
+            padding: 14px 16px;
+            border-bottom: 2px solid #cbd5e1;
+            border-top: none;
+        }
+
+        .table-devolucao tbody td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 13px 16px;
+            font-size: 14px;
+            color: #334155;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .table-devolucao tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table-devolucao td.col-titulo {
+            text-align: left;
+            font-weight: 600;
+            color: #0f172a;
+            min-width: 200px;
+        }
+
+        .table-devolucao td.col-autor {
+            text-align: left;
+            min-width: 160px;
+            color: #475569;
+        }
+
+        .table-devolucao td.nowrap-cell {
+            white-space: nowrap;
+        }
+
+        .badge-genre {
+            background-color: #e0e7ff;
+            color: #3730a3;
+            font-weight: 600;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+        }
+
+        .comment-section-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 24px;
+            margin-top: 25px;
+        }
+
+        .comment-item {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 14px 18px;
+            margin-bottom: 12px;
+        }
+
+        .stars-gold {
+            color: #f59e0b;
+            font-size: 16px;
+        }
+
+        @media (max-width: 768px) {
+            .devolve-wrapper {
+                width: 100% !important;
+                margin: 15px auto !important;
+                padding: 20px 15px;
+                border-radius: 0;
+                border: none;
+            }
         }
     </style>
-
-
-
-
-
 </head>
 
-
-
 <body>
-
     <?php include '../includes/header.php'; ?>
 
-    <div class="container">
-
-        <h2>Devolver Livro</h2>
+    <div class="devolve-wrapper">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+            <h2><i class="fa fa-undo text-danger mr-2"></i>Meus Empréstimos Ativos</h2>
+            <a href="lista_livros.php" class="btn btn-warning">
+                <i class="fa fa-book mr-1"></i> Ver Catálogo
+            </a>
+        </div>
 
         <?php
         $msg_sucesso = isset($_SESSION['success_message']) ? $_SESSION['success_message'] : (isset($_GET['success_message']) ? $_GET['success_message'] : (isset($_GET['message']) ? $_GET['message'] : null));
@@ -95,245 +180,169 @@ if ($user_id > 0) {
         ?>
 
         <?php if (!empty($msg_sucesso)) { ?>
-            <div class="alert alert-success" role="alert">
-                <?php echo htmlspecialchars($msg_sucesso); ?>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <i class="fa fa-check-circle mr-1"></i> <?php echo htmlspecialchars($msg_sucesso); ?>
             </div>
         <?php } ?>
 
         <?php if (!empty($msg_erro)) { ?>
-            <div class="alert alert-danger" role="alert">
-                <?php echo htmlspecialchars($msg_erro); ?>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <i class="fa fa-exclamation-circle mr-1"></i> <?php echo htmlspecialchars($msg_erro); ?>
             </div>
         <?php } ?>
 
         <?php if (!empty($livros)) { ?>
-
             <div class="table-responsive">
-
-                <table class="table">
-
+                <table class="table-devolucao table-striped">
                     <thead>
-
                         <tr>
-
                             <th>Título</th>
-
                             <th>Autor</th>
-
-                            <th>Ano de Publicação</th>
-
+                            <th>Ano</th>
                             <th>ISBN</th>
-
-                            <th>Genero</th>
-
+                            <th>Gênero</th>
                             <th>Data de Empréstimo</th>
-
-                            <th>Data da Devolução</th>
-
+                            <th>Previsão de Devolução</th>
                             <th>Ação</th>
-
                         </tr>
-
                     </thead>
-
                     <tbody>
-
-                        <?php foreach ($livros as $livro) { ?>
-
+                        <?php foreach ($livros as $livro) {
+                            $data_emp = !empty($livro['data_emprestimo']) ? date('d/m/Y', strtotime($livro['data_emprestimo'])) : '-';
+                            $data_dev = !empty($livro['data_devolucao']) ? date('d/m/Y', strtotime($livro['data_devolucao'])) : (!empty($livro['data_emprestimo']) ? date('d/m/Y', strtotime($livro['data_emprestimo'] . ' +14 days')) : '-');
+                            ?>
                             <tr>
-
-                                <td>
+                                <td class="col-titulo">
                                     <?php echo htmlspecialchars($livro['titulo']); ?>
                                 </td>
-
-                                <td>
+                                <td class="col-autor">
                                     <?php echo htmlspecialchars($livro['autor']); ?>
                                 </td>
-
-                                <td>
+                                <td class="nowrap-cell">
                                     <?php echo htmlspecialchars($livro['ano_publicacao']); ?>
                                 </td>
-
-                                <td>
-                                    <?php echo htmlspecialchars($livro['isbn']); ?>
+                                <td class="nowrap-cell">
+                                    <code><?php echo htmlspecialchars($livro['isbn']); ?></code>
                                 </td>
-
-                                <td>
-                                    <?php echo htmlspecialchars($livro['genero']); ?>
+                                <td class="nowrap-cell">
+                                    <span class="badge-genre"><?php echo htmlspecialchars($livro['genero']); ?></span>
                                 </td>
-
-                                <td>
-                                    <?php echo date('d/m/Y', strtotime($livro['data_emprestimo'])); ?>
+                                <td class="nowrap-cell font-weight-bold">
+                                    <?php echo htmlspecialchars($data_emp); ?>
                                 </td>
-
-
-
-                                <td>
-                                    <?php echo date('d/m/Y', strtotime($livro['data_emprestimo'] . '+1 days')); ?>
+                                <td class="nowrap-cell text-danger font-weight-bold">
+                                    <?php echo htmlspecialchars($data_dev); ?>
                                 </td>
-
-
-
-                                <td>
-
-                                    <form method="POST" action="../actions/devolve_livro_action.php">
-
-                                        <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
-
-                                        <button type="submit" class="btn btn-danger">Devolver</button>
-
+                                <td class="nowrap-cell">
+                                    <form method="POST" action="../actions/devolve_livro_action.php" style="display: inline-block; margin: 0;">
+                                        <input type="hidden" name="livro_id" value="<?php echo htmlspecialchars($livro['id']); ?>">
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="fa fa-undo mr-1"></i> Devolver
+                                        </button>
                                     </form>
-
                                 </td>
-
                             </tr>
-
                         <?php } ?>
-
                     </tbody>
-
                 </table>
-
             </div>
+
+            <div class="alert alert-warning text-center mt-3 mb-0 d-md-none" role="alert">
+                <i class="fa fa-arrows-alt-h mr-1"></i> Role a página horizontalmente para visualizar a tabela completa.
+            </div>
+
+            <?php foreach ($livros as $livro) {
+                $livro_id = (int)$livro['id'];
+                ?>
+                <div class="comment-section-card">
+                    <h4 class="font-weight-bold mb-3 text-dark">
+                        <i class="fa fa-comment-dots text-primary mr-2"></i>Avaliação do livro: "<?php echo htmlspecialchars($livro['titulo']); ?>"
+                    </h4>
+
+                    <form action="../actions/salvar_comentario_action.php" method="post" class="mb-4">
+                        <input type="hidden" name="livro_id" value="<?php echo $livro_id; ?>">
+                        <div class="form-group">
+                            <label for="comentario_<?php echo $livro_id; ?>" class="font-weight-bold">Seu Comentário:</label>
+                            <textarea id="comentario_<?php echo $livro_id; ?>" name="comentario" class="form-control" rows="3" placeholder="Compartilhe o que achou da leitura..." required></textarea>
+                        </div>
+                        <div class="form-row align-items-center">
+                            <div class="col-sm-6 col-md-4 mb-2">
+                                <label for="avaliacao_<?php echo $livro_id; ?>" class="font-weight-bold">Sua Nota:</label>
+                                <select id="avaliacao_<?php echo $livro_id; ?>" name="avaliacao" class="form-control" required>
+                                    <option value="5">★★★★★ (5 estrelas - Excelente)</option>
+                                    <option value="4">★★★★☆ (4 estrelas - Muito bom)</option>
+                                    <option value="3">★★★☆☆ (3 estrelas - Bom)</option>
+                                    <option value="2">★★☆☆☆ (2 estrelas - Regular)</option>
+                                    <option value="1">★☆☆☆☆ (1 estrela - Fraco)</option>
+                                </select>
+                            </div>
+                            <div class="col-sm-6 col-md-4 mb-2 align-self-end">
+                                <button type="submit" class="btn btn-primary btn-block">
+                                    <i class="fa fa-paper-plane mr-1"></i> Enviar Comentário
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+
+                    <h5 class="font-weight-bold text-secondary mb-3">Comentários da Comunidade:</h5>
+                    <?php
+                    $stmt_c = $conn->prepare("SELECT c.comentario, c.avaliacao, u.username FROM comentarios c JOIN usuarios u ON c.user_id = u.id WHERE c.livro_id = ? ORDER BY c.id DESC");
+                    if ($stmt_c) {
+                        $stmt_c->bind_param("i", $livro_id);
+                        $stmt_c->execute();
+                        $result_comentarios = $stmt_c->get_result();
+
+                        if ($result_comentarios && $result_comentarios->num_rows > 0) {
+                            while ($row_comentario = $result_comentarios->fetch_assoc()) {
+                                $avaliacao = (int)$row_comentario['avaliacao'];
+                                ?>
+                                <div class="comment-item">
+                                    <div class="d-flex justify-content-between align-items-center mb-1">
+                                        <strong><i class="fa fa-user-circle text-muted mr-1"></i><?php echo htmlspecialchars($row_comentario['username']); ?></strong>
+                                        <span class="stars-gold">
+                                            <?php
+                                            for ($i = 1; $i <= 5; $i++) {
+                                                echo ($i <= $avaliacao) ? '★' : '☆';
+                                            }
+                                            ?>
+                                        </span>
+                                    </div>
+                                    <p class="mb-0 text-dark"><?php echo nl2br(htmlspecialchars($row_comentario['comentario'])); ?></p>
+                                </div>
+                                <?php
+                            }
+                        } else {
+                            echo '<p class="text-muted small">Nenhum comentário cadastrado para este livro ainda. Seja o primeiro a opinar!</p>';
+                        }
+                        $stmt_c->close();
+                    }
+                    ?>
+                </div>
+            <?php } ?>
 
         <?php } else { ?>
-
-            <p>Nenhum livro emprestado.</p>
-
+            <div class="alert alert-info text-center py-4 my-3" role="alert">
+                <i class="fa fa-info-circle mr-1"></i> Você não possui livros emprestados no momento.
+            </div>
         <?php } ?>
 
-        <br>
-
-        <div class="alert alert-warning text-center mb-0 d-md-none" role="alert">
-
-            Por favor, role a página horizontalmente para visualizar a tabela completa.
-
-        </div>
-
-        <br>
-
-        <style>
-            /* Estilo para a caixa de comentário */
-
-            .comment-box:nth-child(odd) {
-
-                background-color: #f1f1f1;
-
-            }
-
-
-
-            .comment-box:nth-child(even) {
-
-                background-color: #eaeaea;
-
-            }
-        </style>
-
-
-
-        <?php foreach ($livros as $livro) { ?>
-            <div class="container mt-4">
-                <h3>Comentários sobre o livro "
-                    <?php echo $livro['titulo']; ?>":
-                </h3>
-                <!-- Formulário para adicionar comentário -->
-                <form action="../actions/salvar_comentario_action.php" method="post">
-                    <input type="hidden" name="livro_id" value="<?php echo $livro['id']; ?>">
-                    <div class="form-group">
-                        <textarea name="comentario" class="form-control" rows="4" required></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label for="avaliacao">Avaliação:</label>
-                        <select name="avaliacao" class="form-control" required>
-                            <option value="1">1 estrela</option>
-                            <option value="2">2 estrelas</option>
-                            <option value="3">3 estrelas</option>
-                            <option value="4">4 estrelas</option>
-                            <option value="5">5 estrelas</option>
-                        </select>
-                    </div>
-                    <button type="submit" class="btn btn-primary">Adicionar Comentário</button>
-                </form>
-
-
-                <h3>Comentários sobre o livro "
-                    <?php echo $livro['titulo']; ?>":
-                </h3>
-                <?php
-                $livro_id = $livro['id'];
-
-                $query_comentarios = "SELECT c.comentario, c.avaliacao, u.username FROM comentarios c, usuarios u WHERE c.livro_id = '$livro_id' AND c.user_id = u.id";
-
-                $result_comentarios = $conn->query($query_comentarios);
-
-                if ($result_comentarios && $result_comentarios->num_rows > 0) {
-                    while ($row_comentario = $result_comentarios->fetch_assoc()) {
-                        echo '<div class="card comment-box">';
-                        echo '<div class="card-body">';
-                        echo '<strong>' . $row_comentario['username'] . ' comentou:</strong> ' . $row_comentario['comentario'];
-                        echo '<br>Avaliação: ' . $row_comentario['avaliacao'] . ' estrela(s)';
-
-                        // Adiciona as estrelas correspondentes à avaliação
-                        $avaliacao = $row_comentario['avaliacao'];
-                        echo '<br>Estrelas: ';
-                        for ($i = 1; $i <= 5; $i++) {
-                            echo ($i <= $avaliacao) ? '★' : '☆';
-                        }
-
-                        echo '</div></div>';
-                    }
-
-                    // Cálculo de avaliação
-                    $query_avaliacao = "SELECT AVG(avaliacao) AS media_avaliacao, SUM(avaliacao) AS total_estrelas FROM comentarios WHERE livro_id = '$livro_id'";
-                    $result_avaliacao = $conn->query($query_avaliacao);
-
-                    if ($result_avaliacao && $row_avaliacao = $result_avaliacao->fetch_assoc()) {
-                        $media_avaliacao = $row_avaliacao['media_avaliacao'];
-                        $total_estrelas = $row_avaliacao['total_estrelas'];
-
-                        echo "<p>Média de Avaliação: " . number_format($media_avaliacao, 1) . " estrela(s)</p>";
-                        echo "<p>Total de Estrelas: " . $total_estrelas . "</p>";
-                    } else {
-                        echo '<p>Sem avaliações</p>';
-                    }
-                } else {
-                    echo '<p>Nenhum comentário para este livro.</p>';
-                }
-                ?>
-            </div>
-
-        <?php } ?>
-
-        <br>
-
-        <br>
-
-        <div class="row mb-3 mt-4">
+        <div class="row mt-4">
             <div class="col-md-6 mb-2">
-                <a href="minhas_leituras.php" class="btn btn-warning btn-block">Voltar para Painel de Usuário</a>
+                <a href="minhas_leituras.php" class="btn btn-warning btn-block">
+                    <i class="fa fa-book-reader mr-1"></i> Minhas Leituras
+                </a>
             </div>
             <div class="col-md-6 mb-2">
-                <a href="lista_livros.php" class="btn btn-warning btn-block">Voltar para Lista de Livros</a>
+                <a href="lista_livros.php" class="btn btn-outline-secondary btn-block">
+                    <i class="fa fa-book mr-1"></i> Ver Catálogo de Livros
+                </a>
             </div>
         </div>
-
     </div>
 
     <script src="../assets/js/script.js"></script>
-
     <script src="../assets/js/bootstrap.min.js"></script>
-
-    <?php
-
-    // Inclui o rodapé
-    
-    include '../includes/footer.php';
-
-    ?>
-
+    <?php include '../includes/footer.php'; ?>
 </body>
-
-
 
 </html>

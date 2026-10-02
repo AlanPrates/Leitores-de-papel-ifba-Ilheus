@@ -47,49 +47,124 @@ if ($current_user_id > 0) {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="pt-br">
 
 <head>
-    <title>Meu Histórico de Empréstimos</title>
+    <meta charset="UTF-8">
+    <title>Meu Histórico de Empréstimos - Leitores de Papel</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
     <link rel="stylesheet" href="../assets/css/bootstrap.min.css">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,700" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/css/style.css">
     <link rel="stylesheet" href="../assets/css/menu-mobile.css">
     <link rel="stylesheet" href="../assets/css/rodape.css">
     <script src="https://kit.fontawesome.com/cf6fa412bd.js" crossorigin="anonymous"></script>
+
     <style>
-        table {
-            border-collapse: collapse;
+        .history-wrapper {
+            width: 96% !important;
+            max-width: 1440px !important;
+            margin: 30px auto !important;
+            background-color: #ffffff;
+            border-radius: 10px;
+            padding: 30px 35px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid #eef2f6;
+            min-height: 60vh;
+        }
+
+        .history-wrapper h2 {
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.5px;
+            margin-bottom: 25px;
+        }
+
+        .table-responsive {
+            margin-top: 10px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: #fff;
+        }
+
+        .table-history {
             width: 100%;
+            margin-bottom: 0;
+            border-collapse: collapse;
+        }
+
+        .table-history thead th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             white-space: nowrap;
-            overflow-x: auto;
+            vertical-align: middle;
+            text-align: center;
+            padding: 14px 16px;
+            border-bottom: 2px solid #cbd5e1;
+            border-top: none;
         }
 
-        th,
-        td {
+        .table-history tbody td {
+            vertical-align: middle;
+            text-align: center;
+            padding: 13px 16px;
+            font-size: 14px;
+            color: #334155;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .table-history tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .table-history td.col-titulo {
             text-align: left;
-            padding: 8px;
+            font-weight: 600;
+            color: #0f172a;
+            min-width: 220px;
         }
 
-        th {
-            background-color: #f2f2f2;
+        .table-history td.col-autor {
+            text-align: left;
+            min-width: 180px;
+            color: #475569;
         }
 
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
+        .table-history td.nowrap-cell {
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .history-wrapper {
+                width: 100% !important;
+                margin: 15px auto !important;
+                padding: 20px 15px;
+                border-radius: 0;
+                border: none;
+            }
         }
     </style>
 </head>
 
 <body>
     <?php include '../includes/header.php'; ?>
-    <br>
-    <div class="container" style="min-height: 70vh;">
-        <h2>Meu Histórico de Empréstimos</h2>
-        <br>
+
+    <div class="history-wrapper">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap">
+            <h2><i class="fa fa-history text-danger mr-2"></i>Histórico de Empréstimos</h2>
+            <a href="minhas_leituras.php" class="btn btn-warning">
+                <i class="fa fa-book-reader mr-1"></i> Minhas Leituras
+            </a>
+        </div>
+
         <?php if (!empty($historico)) { ?>
             <div class="table-responsive">
-                <table class="table table-bordered table-striped">
+                <table class="table-history table-striped">
                     <thead>
                         <tr>
                             <th>Título do Livro</th>
@@ -99,28 +174,40 @@ if ($current_user_id > 0) {
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($historico as $row) { ?>
+                        <?php foreach ($historico as $row) {
+                            $data_emp = !empty($row["data_emprestimo"]) ? date('d/m/Y H:i', strtotime($row["data_emprestimo"])) : '-';
+                            $data_dev = !empty($row["data_devolucao"]) ? date('d/m/Y H:i', strtotime($row["data_devolucao"])) : '-';
+                            ?>
                             <tr>
-                                <td><?php echo htmlspecialchars($row["titulo"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["autor"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["data_emprestimo"]); ?></td>
-                                <td><?php echo htmlspecialchars($row["data_devolucao"]); ?></td>
+                                <td class="col-titulo"><?php echo htmlspecialchars($row["titulo"]); ?></td>
+                                <td class="col-autor"><?php echo htmlspecialchars($row["autor"]); ?></td>
+                                <td class="nowrap-cell"><?php echo htmlspecialchars($data_emp); ?></td>
+                                <td class="nowrap-cell font-weight-bold text-secondary"><?php echo htmlspecialchars($data_dev); ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>
                 </table>
             </div>
         <?php } else { ?>
-            <div class="alert alert-info">Nenhum registro encontrado no seu histórico de empréstimos.</div>
+            <div class="alert alert-info text-center py-4 my-3">
+                <i class="fa fa-info-circle mr-1"></i> Nenhum registro encontrado no seu histórico de empréstimos.
+            </div>
         <?php } ?>
 
-        <br>
-        <div class="alert alert-warning text-center mb-0 d-md-none" role="alert">
-            Por favor, role a página horizontalmente para visualizar a tabela completa.
+        <div class="alert alert-warning text-center mt-3 mb-0 d-md-none" role="alert">
+            <i class="fa fa-arrows-alt-h mr-1"></i> Role a página horizontalmente para visualizar a tabela completa.
         </div>
-        <div class="row mb-3 mt-4">
-            <div class="col-md-12 mb-2">
-                <a href="aluno.php" class="btn btn-warning btn-block">Voltar para Painel de Usuário</a>
+
+        <div class="row mt-4">
+            <div class="col-md-6 mb-2">
+                <a href="aluno.php" class="btn btn-warning btn-block">
+                    <i class="fa fa-arrow-left mr-1"></i> Voltar para Painel Principal
+                </a>
+            </div>
+            <div class="col-md-6 mb-2">
+                <a href="lista_livros.php" class="btn btn-outline-secondary btn-block">
+                    <i class="fa fa-book mr-1"></i> Ver Catálogo de Livros
+                </a>
             </div>
         </div>
     </div>
